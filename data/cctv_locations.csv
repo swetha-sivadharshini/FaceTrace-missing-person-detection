@@ -1,0 +1,104 @@
+camera_id,location_name,area,city,latitude,longitude,video_path
+CAM001,Central Bus Stand,Chathiram Bus Stand,Trichy,10.8050,78.6898,static/videos/cam001.mp4
+CAM002,Trichy Junction,Railway Colony,Trichy,10.8043,78.6920,static/videos/cam002.mp4
+CAM003,Mahalakshmi Hospital,Williams Road,Trichy,10.8075,78.6915,static/videos/cam003.mp4
+CAM004,Chathiram Bus Stand Signal,Chathiram,Trichy,10.8058,78.6901,static/videos/cam004.mp4
+CAM005,Fenner Factory,Thuvakudi,Trichy,10.7802,78.7523,static/videos/cam005.mp4
+CAM006,Sri Ranganathaswamy Temple,Srirangam,Trichy,10.8626,78.6896,static/videos/cam006.mp4
+CAM007,Gandhi Market,Thillai Nagar,Trichy,10.7952,78.6981,static/videos/cam007.mp4
+CAM008,Checkpost,Thuvakudi,Trichy,10.7805,78.7512,static/videos/cam008.mp4
+CAM009,Fort Station,Karur Bypass,Trichy,10.8205,78.6645,static/videos/cam009.mp4
+CAM010,VOC Park,Cantonment,Trichy,10.7934,78.7056,static/videos/cam010.mp4
+CAM011,Collector Office,Thillai Nagar,Trichy,10.7928,78.7012,static/videos/cam011.mp4
+CAM012,Corporation Office,Cantonment,Trichy,10.7962,78.7034,static/videos/cam012.mp4
+CAM013,Central Prison,Trichy,Trichy,10.7889,78.7123,static/videos/cam013.mp4
+CAM014,NIT Trichy,Thuvakudi,Trichy,10.7751,78.7625,static/videos/cam014.mp4
+CAM015,Uyyakondan Thirumalai,Thirupparaithurai,Trichy,10.8212,78.7201,static/videos/cam015.mp4
+CAM016,Kaveri Bridge,Mukkombu,Trichy,10.8671,78.7529,static/videos/cam016.mp4
+CAM017,Kollidam Bridge,Srirangam,Trichy,10.8589,78.6875,static/videos/cam017.mp4
+CAM018,MGMGH,Palakkarai,Trichy,10.8042,78.6875,static/videos/cam018.mp4
+CAM019,TVS Tollgate,Crawford,Trichy,10.7812,78.7228,static/videos/cam019.mp4
+CAM020,ESI Hospital,Thillai Nagar,Trichy,10.7931,78.6992,static/videos/cam020.mp4
+CAM021,New Bus Stand,Kattur,Trichy,10.7814,78.7101,static/videos/cam021.mp4
+CAM022,Junction Entrance,Contonment,Trichy,10.8034,78.6918,static/videos/cam022.mp4
+CAM023,Vekkali Amman Temple,Woraiyur,Trichy,10.8152,78.6829,static/videos/cam023.mp4
+CAM024,KAPV Government Medical College,MGMGH,Trichy,10.8021,78.6845,static/videos/cam024.mp4
+CAM025,Gandhi Market Main Road,Thillai Nagar,Trichy,10.7945,78.6989,static/videos/cam025.mp4
+CAM026,Ponmalai Road,Golden Rock,Trichy,10.7861,78.7291,static/videos/cam026.mp4
+CAM027,Srirangam Bus Stop,Srirangam,Trichy,10.8621,78.6901,static/videos/cam027.mp4
+CAM028,St. Joseph's College,Thillai Nagar,Trichy,10.8001,78.6965,static/videos/cam028.mp4
+CAM029,Bishop Heber College,Puthur,Trichy,10.7923,78.7112,static/videos/cam029.mp4
+CAM030,LIC Building,Thillai Nagar,Trichy,10.7965,78.7021,static/videos/cam030.mp4
+CAM031,Aruna Theatre,Palakkarai,Trichy,10.8061,78.6875,static/videos/cam031.mp4
+CAM032,Thillai Nagar Arch,Thillai Nagar,Trichy,10.7932,78.6985,static/videos/cam032.mp4
+CAM033,Anna Statue,Chathiram,Trichy,10.8062,78.6902,static/videos/cam033.mp4
+CAM034,Old Bus Stand,Chathiram,Trichy,10.8072,78.6889,static/videos/cam034.mp4
+CAM035,Kamarajar Statue,Williams Road,Trichy,10.8081,78.6922,static/videos/cam035.mp4
+CAM036,Trichy Toll Plaza,Thuvakudi,Trichy,10.7811,78.7489,static/videos/cam036.mp4
+CAM037,Golden Rock Signal,Golden Rock,Trichy,10.7875,78.7312,static/videos/cam037.mp4
+CAM038,CSI Hospital,Palakkarai,Trichy,10.8035,78.6889,static/videos/cam038.mp4
+CAM039,Nathar Shah Mosque,Thillai Nagar,Trichy,10.7911,78.7055,static/videos/cam039.mp4
+CAM040,Government Polytechnic,Thuvakudi,Trichy,10.7821,78.7514,static/videos/cam040.mp4
+CAM041,Musiri Road Start,Thuvakudi,Trichy,10.7778,78.7456,static/videos/cam041.mp4
+CAM042,Annai Hospital,Srirangam,Trichy,10.8652,78.6885,static/videos/cam042.mp4
+CAM043,Kaveri Bridge (Upper Anicut),Mukkombu,Trichy,10.8732,78.7612,static/videos/cam043.mp4
+CAM044,Periyar Statue,Chathiram,Trichy,10.8059,78.6899,static/videos/cam044.mp4
+CAM045,Collectorate Gate,Thillai Nagar,Trichy,10.7931,78.7015,static/videos/cam045.mp4
+CAM046,Vetri Theatre,Cantonment,Trichy,10.7942,78.7042,static/videos/cam046.mp4
+CAM047,National College,Srirangam,Trichy,10.8645,78.6912,static/videos/cam047.mp4
+CAM048,Police Recruit School,Trichy,Trichy,10.8102,78.7154,static/videos/cam048.mp4
+CAM049,Srirangam Market,Srirangam,Trichy,10.8631,78.6899,static/videos/cam049.mp4
+CAM050,Thuvakudi Toll Plaza,Thuvakudi,Trichy,10.7742,78.7789,static/videos/cam050.mp4
+CAM051,Bharathidasan University,Khajamalai,Trichy,10.8012,78.7201,static/videos/cam051.mp4
+CAM052,City Municipal Office,Woraiyur,Trichy,10.8141,78.6812,static/videos/cam052.mp4
+CAM053,Sengunthar College,Woraiyur,Trichy,10.8178,78.6795,static/videos/cam053.mp4
+CAM054,Omni Bus Stand,Chathiram,Trichy,10.8048,78.6905,static/videos/cam054.mp4
+CAM055,MGR Statue,Williams Road,Trichy,10.8078,78.6928,static/videos/cam055.mp4
+CAM056,Central Market,Chathiram,Trichy,10.8052,78.6885,static/videos/cam056.mp4
+CAM057,Alangara Street,Woraiyur,Trichy,10.8155,78.6832,static/videos/cam057.mp4
+CAM058,Railway Gate,K.K. Nagar,Trichy,10.7932,78.7145,static/videos/cam058.mp4
+CAM059,Cauvery Theatre,Chathiram,Trichy,10.8065,78.6891,static/videos/cam059.mp4
+CAM060,Trichy Club,Cantonment,Trichy,10.7982,78.7015,static/videos/cam060.mp4
+CAM061,Ramalinga Nagar Arch,Thillai Nagar,Trichy,10.7948,78.6965,static/videos/cam061.mp4
+CAM062,Police Commissioner Office,Cantonment,Trichy,10.7968,78.7052,static/videos/cam062.mp4
+CAM063,Sivan Kovil Street,Woraiyur,Trichy,10.8162,78.6821,static/videos/cam063.mp4
+CAM064,Saraswathi Mahal,Srirangam,Trichy,10.8625,78.6902,static/videos/cam064.mp4
+CAM065,Jenney's Residency,Williams Road,Trichy,10.8072,78.6912,static/videos/cam065.mp4
+CAM066,Thuvakudi New Bus Stand,Thuvakudi,Trichy,10.7805,78.7505,static/videos/cam066.mp4
+CAM067,VOC Nagar Entrance,K.K. Nagar,Trichy,10.7905,78.7134,static/videos/cam067.mp4
+CAM068,Collector Office Signal,Thillai Nagar,Trichy,10.7925,78.7018,static/videos/cam068.mp4
+CAM069,Musiri Road Pirivu,Thuvakudi,Trichy,10.7775,78.7448,static/videos/cam069.mp4
+CAM070,Srirangam Checkpost,Srirangam,Trichy,10.8642,78.6831,static/videos/cam070.mp4
+CAM071,Thuvakudi Checkpost,Thuvakudi,Trichy,10.7792,78.7482,static/videos/cam071.mp4
+CAM072,Manachanallur Road,Kattur,Trichy,10.7825,78.7115,static/videos/cam072.mp4
+CAM073,JJ Hospital,K.K. Nagar,Trichy,10.7912,78.7145,static/videos/cam073.mp4
+CAM074,Periyar Nagar Arch,Crawford,Trichy,10.7815,78.7221,static/videos/cam074.mp4
+CAM075,Karur Bypass Start,Karur Bypass,Trichy,10.8225,78.6662,static/videos/cam075.mp4
+CAM076,Trichy Namakkal Bypass,Thuvakudi,Trichy,10.7785,78.7421,static/videos/cam076.mp4
+CAM077,Thuvakudi Flyover,Thuvakudi,Trichy,10.7812,78.7525,static/videos/cam077.mp4
+CAM078,Senthaneerpuram,Senthaneerpuram,Trichy,10.7852,78.7095,static/videos/cam078.mp4
+CAM079,Panjapur Road,Panjapur,Trichy,10.7612,78.6895,static/videos/cam079.mp4
+CAM080,Trichy Medical College Gate,MGMGH,Trichy,10.8025,78.6842,static/videos/cam080.mp4
+CAM081,Corporation Bus Stop,Cantonment,Trichy,10.7961,78.7038,static/videos/cam081.mp4
+CAM082,Vivekananda School,Puthur,Trichy,10.7928,78.7121,static/videos/cam082.mp4
+CAM083,Anna Park,Thillai Nagar,Trichy,10.7942,78.7001,static/videos/cam083.mp4
+CAM084,Dr. Radhakrishnan Statue,Thillai Nagar,Trichy,10.7962,78.7012,static/videos/cam084.mp4
+CAM085,Big Bazaar Street,Palakkarai,Trichy,10.8051,78.6878,static/videos/cam085.mp4
+CAM086,EVR Road,Thillai Nagar,Trichy,10.7952,78.6992,static/videos/cam086.mp4
+CAM087,Manapparai Road,Manapparai Road,Trichy,10.7712,78.7325,static/videos/cam087.mp4
+CAM088,Puliyambatti Checkpost,Puliyambatti,Trichy,10.7785,78.7881,static/videos/cam088.mp4
+CAM089,Khajamalai,Khajamalai,Trichy,10.7992,78.7215,static/videos/cam089.mp4
+CAM090,Railway Colony,Railway Colony,Trichy,10.8032,78.6932,static/videos/cam090.mp4
+CAM091,Cauvery Mall,Williams Road,Trichy,10.8078,78.6918,static/videos/cam091.mp4
+CAM092,Golden Rock Locomotive Works,Golden Rock,Trichy,10.7852,78.7275,static/videos/cam092.mp4
+CAM093,Sub Registrar Office,Thillai Nagar,Trichy,10.7932,78.6992,static/videos/cam093.mp4
+CAM094,Ponmalai Golden Rock Road,Ponmalai,Trichy,10.7855,78.7289,static/videos/cam094.mp4
+CAM095,Sathya Sai School,Srirangam,Trichy,10.8628,78.6852,static/videos/cam095.mp4
+CAM096,Telecom Office,Cantonment,Trichy,10.7962,78.7042,static/videos/cam096.mp4
+CAM097,Passport Office,Thillai Nagar,Trichy,10.7958,78.7025,static/videos/cam097.mp4
+CAM098,VOC College,Thillai Nagar,Trichy,10.7942,78.7005,static/videos/cam098.mp4
+CAM099,Bharathi Street,Srirangam,Trichy,10.8621,78.6885,static/videos/cam099.mp4
+CAM100,Cooperative Bank,Chathiram,Trichy,10.8055,78.6895,static/videos/cam100.mp4
+CAM101,Singarathoppu Signal,Singarathoppu,Trichy,10.7992,78.6895,static/videos/cam101.mp4
+CAM102,Dmart,Thuvakudi,Trichy,10.7815,78.7490,static/videos/cam102.mp4
+CAM103,Smartinit,Thuvakudi,Trichy,10.7818,78.7505,static/videos/cam103.mp4
