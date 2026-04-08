@@ -96,7 +96,7 @@ facetrace-missing-person-detection
 
 **Add Missing Person Case**
 
-![Add Case](screenshots/admin/admin_add_case.jpg)
+![Add Case](screenshots/admin/add_missing_person_case.jpg)
 
 ---
 
