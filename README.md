@@ -1,98 +1,164 @@
 # FaceTrace – Missing Person Detection System
 
-An AI-powered system that identifies missing persons by analyzing CCTV footage using computer vision techniques.
+AI-powered system that identifies missing persons by analyzing CCTV footage using computer vision techniques.
 
 ---
 
-# Overview
+## Overview
 
-FaceTrace is a computer vision based application designed to assist authorities in locating missing persons using surveillance footage.
-The system allows users to register missing person cases and upload CCTV video recordings. It then detects faces in the video frames and compares them with stored images to identify possible matches.
+FaceTrace is a computer vision based system designed to help identify missing persons by analyzing CCTV video footage. The system allows users to register missing person details and upload CCTV videos. It then detects faces in the video frames and compares them with stored images to find potential matches.
 
-By automating the process of scanning large volumes of CCTV footage, FaceTrace helps reduce manual effort and speeds up investigations.
+This project aims to assist authorities and organizations in locating missing individuals more efficiently using automated surveillance analysis.
 
 ---
 
-# Features
+## Features
 
 • User registration and login system
-• Missing person case registration
+• Missing person registration
 • CCTV video upload and processing
 • Face detection using OpenCV
 • Face comparison and matching
-• Admin dashboard for monitoring cases
-• Complaint management system
+• Admin dashboard for monitoring
 • Search history tracking
 
 ---
 
-# Technologies Used
+## Technologies Used
 
-Backend
 • Python
 • Flask
-
-AI / Computer Vision
 • OpenCV
 • NumPy
-
-Database
 • SQLite
-
-Frontend
 • HTML
 • CSS
 • JavaScript
 
 ---
 
-# Project Structure
+## Project Structure
 
 ```
-FACETRACE
+facetrace-missing-person-detection
 │
-├── ai/                     # Face detection and video processing modules
-├── data/                   # CCTV location data
-├── static/                 # CSS, JavaScript, and assets
-├── templates/              # HTML templates for UI
-├── utils/                  # Database helper functions
+├── app.py
+├── requirements.txt
+├── README.md
 │
-├── FaceTrace.db            # SQLite database
-├── app.py                  # Main Flask application
-├── requirements.txt        # Python dependencies
-├── README.md               # Project documentation
-└── LICENSE                 # License file
+├── templates
+│   ├── login.html
+│   ├── register.html
+│   ├── dashboard.html
+│   └── ...
+│
+├── static
+│   ├── css
+│   ├── js
+│   └── images
+│
+├── utils
+│   └── database.py
+│
+├── uploads
+│
+└── screenshots
+    ├── admin
+    │   ├── admin_login.jpg
+    │   ├── admin_dashboard.jpg
+    │   ├── admin_add_case.jpg
+    │   ├── admin_upload_cctv.jpg
+    │   ├── admin_search_person.jpg
+    │   └── admin_search_result.jpg
+    │
+    └── user
+        ├── user_home.jpg
+        └── user_complaint_form.jpg
 ```
 
 ---
 
-# Installation
+## System Interface
 
-### 1 Clone the repository
+### Admin Panel
+
+**Admin Login**
+
+![Admin Login](screenshots/admin/admin_login.jpg)
+
+---
+
+**Admin Dashboard**
+
+![Admin Dashboard](screenshots/admin/admin_dashboard.jpg)
+
+---
+
+**Add Missing Person Case**
+
+![Add Case](screenshots/admin/admin_add_case.jpg)
+
+---
+
+**Upload CCTV Footage**
+
+![Upload CCTV](screenshots/admin/admin_upload_cctv.jpg)
+
+---
+
+**Search Missing Person**
+
+![Search Person](screenshots/admin/admin_search_person.jpg)
+
+---
+
+**Search Result**
+
+![Search Result](screenshots/admin/admin_search_result.jpg)
+
+---
+
+### User Panel
+
+**User Home Page**
+
+![User Home](screenshots/user/user_home.jpg)
+
+---
+
+**User Complaint Form**
+
+![User Complaint](screenshots/user/user_complaint_form.jpg)
+
+---
+
+## Installation
+
+Clone the repository
 
 ```
 git clone https://github.com/swetha-sivadharshini/facetrace-missing-person-detection.git
 ```
 
-### 2 Navigate to the project directory
+Navigate to project folder
 
 ```
 cd facetrace-missing-person-detection
 ```
 
-### 3 Install dependencies
+Install dependencies
 
 ```
 pip install -r requirements.txt
 ```
 
-### 4 Run the application
+Run the application
 
 ```
 python app.py
 ```
 
-### 5 Open the browser
+Open the browser and visit
 
 ```
 http://127.0.0.1:5000
@@ -100,17 +166,16 @@ http://127.0.0.1:5000
 
 ---
 
-# Future Improvements
+## Future Improvements
 
 • Integration with deep learning face recognition models
 • Real-time CCTV camera integration
 • Cloud deployment
 • Mobile application support
-• Large-scale surveillance data handling
 
 ---
 
-# Author
+## Author
 
-Swetha Sivadharshini
-Computer Science Engineering Student
+**Swetha Sivadharshini**
+Computer Science Student
