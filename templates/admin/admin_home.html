@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FaceTrace | Admin Dashboard</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f7fc;
+            color: #1a2c3e;
+            line-height: 1.5;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header Section */
+        .header {
+            background: linear-gradient(135deg, #0b2b44 0%, #123e5e 100%);
+            color: white;
+            padding: 48px 0 40px;
+            margin-bottom: 40px;
+            border-bottom: 4px solid #3b82f6;
+        }
+
+        .header-content h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 12px;
+        }
+
+        .header-content h1 i {
+            color: #3b82f6;
+            margin-right: 12px;
+        }
+
+        .header-content .tagline {
+            font-size: 1.1rem;
+            color: #cbd5e6;
+            margin-bottom: 24px;
+        }
+
+        .admin-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(59, 130, 246, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 8px 24px;
+            border-radius: 40px;
+            border: 1px solid rgba(59, 130, 246, 0.5);
+            margin-top: 16px;
+        }
+
+        .admin-badge i {
+            color: #3b82f6;
+        }
+
+        /* Stats Row */
+        .stats-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 32px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(8px);
+            padding: 12px 24px;
+            border-radius: 60px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid rgba(59,130,246,0.3);
+        }
+
+        .stat-card i {
+            color: #3b82f6;
+            margin-right: 8px;
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 48px 0 28px;
+            color: #0f2b3f;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 5px solid #3b82f6;
+            padding-left: 20px;
+        }
+
+        .section-title i {
+            color: #3b82f6;
+            font-size: 1.6rem;
+        }
+
+        /* Admin Access Cards Grid */
+        .access-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 28px;
+            margin-bottom: 48px;
+        }
+
+        .access-card {
+            background: white;
+            border-radius: 28px;
+            padding: 28px;
+            transition: all 0.3s ease;
+            border: 1px solid #e4e9f2;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+
+        .access-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.1);
+            border-color: #3b82f6;
+        }
+
+        /* New logo wrapper: enhanced card-icon with brand identity */
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #1e4a76, #0f2f4a);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+        
+        .access-card:hover .card-icon {
+            transform: scale(1.02);
+        }
+        
+        .card-icon i {
+            font-size: 28px;
+            color: white;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+        
+        /* Additional small badge for module identity (subtle) */
+        .card-icon::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+            pointer-events: none;
+        }
+
+        .access-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #0f2b3f;
+        }
+
+        .access-description {
+            color: #4a627a;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .permissions-list {
+            list-style: none;
+            margin: 16px 0 8px;
+            padding-top: 16px;
+            border-top: 1px solid #eef2f8;
+        }
+
+        .permissions-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: #2c4a6e;
+            padding: 6px 0;
+        }
+
+        .permissions-list li i {
+            color: #3b82f6;
+            font-size: 0.75rem;
+            width: 20px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: #eef2ff;
+            color: #1e4a76;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-top: 12px;
+        }
+
+        /* Admin Role Overview */
+        .role-overview {
+            background: linear-gradient(135deg, #f8fafd 0%, #ffffff 100%);
+            border-radius: 32px;
+            padding: 40px;
+            margin: 48px 0;
+            border: 1px solid #e4e9f2;
+        }
+
+        .role-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 32px;
+            color: #0f2b3f;
+        }
+
+        .role-title i {
+            color: #3b82f6;
+            margin-right: 12px;
+        }
+
+        .role-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+        }
+
+        .role-item {
+            display: flex;
+            gap: 16px;
+            padding: 20px;
+            background: white;
+            border-radius: 24px;
+            border: 1px solid #eef2f8;
+            transition: all 0.2s;
+        }
+
+        .role-icon {
+            width: 48px;
+            height: 48px;
+            background: #eef2ff;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .role-icon i {
+            font-size: 24px;
+            color: #3b82f6;
+        }
+
+        .role-text strong {
+            display: block;
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #0f2b3f;
+        }
+
+        .role-text p {
+            font-size: 0.85rem;
+            color: #5a6e8a;
+            line-height: 1.4;
+        }
+
+        /* System Info Footer */
+        .system-footer {
+            background: #0f2a3a;
+            border-radius: 28px;
+            padding: 28px 32px;
+            margin: 40px 0 32px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .security-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #b9d0e6;
+            font-size: 0.85rem;
+        }
+
+        .security-info i {
+            color: #3b82f6;
+            font-size: 1.1rem;
+        }
+
+        .version-info {
+            color: #8aa4c0;
+            font-size: 0.8rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: #123e5e;
+            padding: 28px 0;
+            text-align: center;
+            border-top: 1px solid #d7dbde;
+            margin-top: 32px;
+        }
+
+        .footer p {
+            color: #6c86a0;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 20px;
+            }
+            .header {
+                padding: 32px 0 28px;
+            }
+            .header-content h1 {
+                font-size: 1.8rem;
+            }
+            .section-title {
+                font-size: 1.4rem;
+            }
+            .role-overview {
+                padding: 28px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1><i class="fas fa-microchip"></i> FACETRACE</h1>
+                <div class="tagline">AI-Powered Missing Person Management System</div>
+                <div class="admin-badge">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Administrator Access · Full System Control</span>
+                    <i class="fas fa-check-circle" style="color: #10b981;"></i>
+                </div>
+                <div class="stats-row">
+                    <div class="stat-card"><i class="fas fa-user-friends"></i> 26 Active Missing Cases</div>
+                    <div class="stat-card"><i class="fas fa-video"></i> 168 CCTV Footage Files</div>
+                    <div class="stat-card"><i class="fas fa-clock"></i> 14 Pending Reviews</div>
+                    <div class="stat-card"><i class="fas fa-brain"></i> AI Engine: Operational</div>
+                    <div class="stat-card"><i class="fas fa-chart-line"></i> 92.3% Match Accuracy</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- Admin Access & Capabilities Section -->
+            <div class="section-title">
+                <i class="fas fa-crown"></i>
+                <span>Your Administrative Privileges</span>
+            </div>
+            <div class="access-grid">
+                <!-- Module 1: Missing Person Cases - Distinctive Case file logo -->
+                <div class="access-card">
+                    <div class="card-icon"><i class="fas fa-folder-open"></i></div>
+                    <h3>Missing Person Case Management</h3>
+                    <div class="access-description">Full control over all missing person cases registered in the system.</div>
+                    <ul class="permissions-list">
+                        <li><i class="fas fa-check-circle"></i> Register new missing person cases</li>
+                        <li><i class="fas fa-check-circle"></i> Edit existing case details & descriptions</li>
+                        <li><i class="fas fa-check-circle"></i> Delete cases (with audit trail)</li>
+                        <li><i class="fas fa-check-circle"></i> View complete case profiles & photos</li>
+                        <li><i class="fas fa-check-circle"></i> Update case status (Active/Resolved/Closed)</li>
+                        <li><i class="fas fa-check-circle"></i> Add investigation notes & evidence</li>
+                    </ul>
+                    <span class="status-badge"><i class="fas fa-chart-simple"></i> 26 Active · 9 Resolved (This Month)</span>
+                </div>
+
+                <!-- Module 2: Complaint Moderation - Distinctive gavel + message logo -->
+                <div class="access-card">
+                    <div class="card-icon"><i class="fas fa-gavel"></i></div>
+                    <h3>Complaint Moderation System</h3>
+                    <div class="access-description">Manage and moderate all user-submitted complaints and reports.</div>
+                    <ul class="permissions-list">
+                        <li><i class="fas fa-check-circle"></i> View all pending complaints</li>
+                        <li><i class="fas fa-check-circle"></i> Accept valid complaints with approval notes</li>
+                        <li><i class="fas fa-check-circle"></i> Reject fraudulent/invalid complaints</li>
+                        <li><i class="fas fa-check-circle"></i> Add official responses to complaints</li>
+                        <li><i class="fas fa-check-circle"></i> Track complaint resolution progress</li>
+                        <li><i class="fas fa-check-circle"></i> View complete complaint history</li>
+                    </ul>
+                    <span class="status-badge"><i class="fas fa-flag"></i> 14 Pending Approval · 42 Processed Total</span>
+                </div>
+
+                <!-- Module 3: CCTV & Video Intelligence - CCTV camera specific logo -->
+                <div class="access-card">
+                    <div class="card-icon"><i class="fas fa-video"></i></div>
+                    <h3>CCTV & Video Intelligence</h3>
+                    <div class="access-description">Complete control over surveillance footage and video processing.</div>
+                    <ul class="permissions-list">
+                        <li><i class="fas fa-check-circle"></i> Upload CCTV footage from multiple sources</li>
+                        <li><i class="fas fa-check-circle"></i> Organize videos in gallery with metadata</li>
+                        <li><i class="fas fa-check-circle"></i> Delete outdated or irrelevant footage</li>
+                        <li><i class="fas fa-check-circle"></i> Trigger AI face detection on videos</li>
+                        <li><i class="fas fa-check-circle"></i> Search footage by location, date, or face</li>
+                        <li><i class="fas fa-check-circle"></i> Export video frames for evidence</li>
+                    </ul>
+                    <span class="status-badge"><i class="fas fa-database"></i> 168 Clips · AI Processing Ready</span>
+                </div>
+
+                <!-- Module 4: AI Face Matching Engine - special AI chip + face logo -->
+                <div class="access-card">
+                    <div class="card-icon"><i class="fas fa-brain"></i></div>
+                    <h3>FaceTrace AI Matching</h3>
+                    <div class="access-description">Advanced facial recognition and cross-referencing capabilities.</div>
+                    <ul class="permissions-list">
+                        <li><i class="fas fa-check-circle"></i> Run AI matching between missing persons and CCTV</li>
+                        <li><i class="fas fa-check-circle"></i> View match results with confidence scores</li>
+                        <li><i class="fas fa-check-circle"></i> Validate and confirm AI-generated matches</li>
+                        <li><i class="fas fa-check-circle"></i> Generate match reports for authorities</li>
+                        <li><i class="fas fa-check-circle"></i> Set match threshold preferences</li>
+                        <li><i class="fas fa-check-circle"></i> Review match history and false positives</li>
+                    </ul>
+                    <span class="status-badge"><i class="fas fa-face-smile"></i> 3 New Potential Matches Detected</span>
+                </div>
+
+                <!-- Module 5: Admin & Role Governance - shield + key logo (distinct) -->
+                <div class="access-card">
+                    <div class="card-icon"><i class="fas fa-user-lock"></i></div>
+                    <h3>Admin & Role Governance</h3>
+                    <div class="access-description">Manage administrator accounts and system access permissions.</div>
+                    <ul class="permissions-list">
+                        <li><i class="fas fa-check-circle"></i> Create new administrator accounts</li>
+                        <li><i class="fas fa-check-circle"></i> Remove or deactivate admin users</li>
+                        <li><i class="fas fa-check-circle"></i> Assign role-based permissions</li>
+                        <li><i class="fas fa-check-circle"></i> View complete admin activity logs</li>
+                        <li><i class="fas fa-check-circle"></i> Monitor login history & sessions</li>
+                        <li><i class="fas fa-check-circle"></i> Configure security settings</li>
+                    </ul>
+                    <span class="status-badge"><i class="fas fa-users"></i> 7 Active Admins · Full Audit Trail</span>
+                </div>
+
+                <!-- Module 6: Analytics & Emergency Alerts - chart-wave + alert logo -->
+                <div class="access-card">
+                    <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3>Analytics & Emergency Alerts</h3>
+                    <div class="access-description">System insights, reporting, and critical alert broadcasting.</div>
+                    <ul class="permissions-list">
+                        <li><i class="fas fa-check-circle"></i> View system performance dashboards</li>
+                        <li><i class="fas fa-check-circle"></i> Generate case resolution reports</li>
+                        <li><i class="fas fa-check-circle"></i> Export data for external analysis</li>
+                        <li><i class="fas fa-check-circle"></i> Broadcast emergency alerts to authorities</li>
+                        <li><i class="fas fa-check-circle"></i> Send notifications to registered users</li>
+                        <li><i class="fas fa-check-circle"></i> Monitor system health & uptime</li>
+                    </ul>
+                    <span class="status-badge"><i class="fas fa-waveform"></i> System Uptime 99.8% · 3 Active Alerts</span>
+                </div>
+            </div>
+
+            <!-- Admin Role Overview Section -->
+            <div class="role-overview">
+                <div class="role-title">
+                    <i class="fas fa-user-shield"></i> Your Role as FaceTrace Administrator
+                </div>
+                <div class="role-grid">
+                    <div class="role-item">
+                        <div class="role-icon"><i class="fas fa-eye"></i></div>
+                        <div class="role-text">
+                            <strong>Full System Visibility</strong>
+                            <p>Access all cases, complaints, and CCTV footage across the platform. Complete transparency into operations.</p>
+                        </div>
+                    </div>
+                    <div class="role-item">
+                        <div class="role-icon"><i class="fas fa-gavel"></i></div>
+                        <div class="role-text">
+                            <strong>Moderation Authority</strong>
+                            <p>Approve or reject complaints, validate AI matches, and ensure data quality across the system.</p>
+                        </div>
+                    </div>
+                    <div class="role-item">
+                        <div class="role-icon"><i class="fas fa-chart-line"></i></div>
+                        <div class="role-text">
+                            <strong>Strategic Oversight</strong>
+                            <p>Monitor resolution rates, analyze patterns, and make data-driven decisions to improve outcomes.</p>
+                        </div>
+                    </div>
+                    <div class="role-item">
+                        <div class="role-icon"><i class="fas fa-lock"></i></div>
+                        <div class="role-text">
+                            <strong>Security & Compliance</strong>
+                            <p>Ensure data protection, manage access controls, and maintain audit logs for accountability.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Optional additional system status section to match design flow (optional, but to keep system footer harmony) -->
+            <div class="system-footer">
+                <div class="security-info">
+                    <i class="fas fa-shield-hooded"></i>
+                    <span>End-to-end encryption | Role-based access control </span>
+                </div>
+                <div class="version-info">
+                    <i class="fas fa-code-branch"></i> FaceTrace Core v3.2.1 · AI Model v2.4
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p><i class="fas fa-microchip"></i> FaceTrace — AI-Powered Missing Person Management System</p>
+            <p style="margin-top: 8px; font-size: 0.75rem;">Advanced Facial Recognition | Video Intelligence | Secure Case Management</p>
+            <p style="margin-top: 12px;">© 2026 FaceTrace · All Rights Reserved · Data encrypted at rest and in transit</p>
+        </div>
+    </footer>
+</body>
+</html>
