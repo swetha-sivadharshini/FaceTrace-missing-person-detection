@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">My Complaint Status</h4>
+                </div>
+                <div class="card-body">
+                    {% if complaints and complaints|length > 0 %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Date Reported</th>
+                                    <th>Status</th>
+                                  
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for complaint in complaints %}
+                                <tr>
+                                    <td>{{ complaint.id }}</td>
+                                    <td>{{ complaint.name }}</td>
+                                    <td>
+                                        {% if complaint.created_at %}
+                                            {% if complaint.created_at is string %}
+                                                {{ complaint.created_at[:10] }}
+                                            {% else %}
+                                                {{ complaint.created_at.strftime('%Y-%m-%d') }}
+                                            {% endif %}
+                                        {% else %}
+                                            N/A
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if complaint.status == 'pending' %}
+                                            <span class="badge bg-warning text-dark">Pending</span>
+                                        {% elif complaint.status == 'accepted' %}
+                                            <span class="badge bg-success">Accepted</span>
+                                        {% elif complaint.status == 'rejected' %}
+                                            <span class="badge bg-danger">Rejected</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">{{ complaint.status }}</span>
+                                        {% endif %}
+                                    </td>
+                                  
+                                   
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-info-circle fa-2x mb-2"></i>
+                        <h5>No complaints found</h5>
+                        <p>You haven't registered any complaints yet.</p>
+                        <a href="{{ url_for('register_complaint') }}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Register a Complaint
+                        </a>
+                    </div>
+                    
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

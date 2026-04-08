@@ -1,0 +1,326 @@
+{% extends "base.html" %}
+{% include "navbar.html" %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold">
+                <i class="fas fa-question-circle me-2" style="color: #1e3c72;"></i>
+                Help & Support
+            </h2>
+            <p class="text-muted">Find answers to common questions and learn how to use FaceTrace effectively.</p>
+        </div>
+    </div>
+
+    <!-- Quick Help Categories -->
+    <div class="row mb-5">
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 border-0 shadow-sm hover-shadow">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-user-shield fa-3x" style="color: #1e3c72;"></i>
+                    </div>
+                    <h5 class="fw-bold">For Law Enforcement</h5>
+                    <p class="text-muted">Guide for admin users and government authorities</p>
+                    <button class="btn btn-outline-primary btn-sm" data-bs-toggle="collapse" data-bs-target="#adminGuide">
+                        View Guide
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 border-0 shadow-sm hover-shadow">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-users fa-3x" style="color: #1e3c72;"></i>
+                    </div>
+                    <h5 class="fw-bold">For Citizens</h5>
+                    <p class="text-muted">How to use FaceTrace as a community member</p>
+                    <button class="btn btn-outline-primary btn-sm" data-bs-toggle="collapse" data-bs-target="#userGuide">
+                        View Guide
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 border-0 shadow-sm hover-shadow">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-robot fa-3x" style="color: #1e3c72;"></i>
+                    </div>
+                    <h5 class="fw-bold">AI Features</h5>
+                    <p class="text-muted">Understanding face recognition and matching</p>
+                    <button class="btn btn-outline-primary btn-sm" data-bs-toggle="collapse" data-bs-target="#aiGuide">
+                        View Guide
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Collapsible Guides -->
+    <div class="row">
+        <div class="col-12">
+            <!-- Admin Guide -->
+            <div class="collapse mb-4" id="adminGuide">
+                <div class="card card-body border-0 shadow-sm">
+                    <h4 class="fw-bold mb-3"><i class="fas fa-user-shield me-2" style="color: #1e3c72;"></i>Law Enforcement Guide</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5 class="mt-3">Dashboard Overview</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>View real-time statistics of missing cases</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Monitor active investigations</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Track found persons through the system</li>
+                            </ul>
+                            
+                            <h5 class="mt-3">Managing Cases</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Register new missing person cases with photos</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Update case status when person is found</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Delete resolved or duplicate cases</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>View all cases with NEW badge indicators</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="mt-3">AI Features</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Upload CCTV footage for face matching</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>View AI match results with confidence scores</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Compare faces across multiple cases</li>
+                            </ul>
+                            
+                            <h5 class="mt-3">Complaint Management</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Review citizen complaints</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Accept valid complaints as official cases</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Reject duplicate or invalid submissions</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Guide -->
+            <div class="collapse mb-4" id="userGuide">
+                <div class="card card-body border-0 shadow-sm">
+                    <h4 class="fw-bold mb-3"><i class="fas fa-users me-2" style="color: #1e3c72;"></i>Citizen Guide</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5 class="mt-3">Getting Started</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Register for an account with your email</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Complete your profile with contact information</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>View public statistics on the dashboard</li>
+                            </ul>
+                            
+                            <h5 class="mt-3">Searching for Missing Persons</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Use the search feature with name, description, or location</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>View basic information about missing persons</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Report sightings through the system</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="mt-3">Registering Complaints</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>File a complaint about a missing person</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Provide photos and identifying information</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Track complaint status (pending/accepted/rejected)</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>View history of all your complaints</li>
+                            </ul>
+                            
+                            <h5 class="mt-3">Privacy & Safety</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Your personal information is protected</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Only law enforcement sees case details</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Report any suspicious activity to authorities</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Features Guide -->
+            <div class="collapse mb-4" id="aiGuide">
+                <div class="card card-body border-0 shadow-sm">
+                    <h4 class="fw-bold mb-3"><i class="fas fa-robot me-2" style="color: #1e3c72;"></i>AI Face Recognition Guide</h4>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="text-center mb-3">
+                                <i class="fas fa-camera fa-3x mb-3" style="color: #1e3c72;"></i>
+                                <h5>Face Detection</h5>
+                                <p class="text-muted">The AI automatically detects faces in uploaded photos and video frames with 99.7% accuracy.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center mb-3">
+                                <i class="fas fa-brain fa-3x mb-3" style="color: #1e3c72;"></i>
+                                <h5>Face Encoding</h5>
+                                <p class="text-muted">Each face is converted into a unique mathematical representation (128-point encoding).</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center mb-3">
+                                <i class="fas fa-search fa-3x mb-3" style="color: #1e3c72;"></i>
+                                <h5>Similarity Matching</h5>
+                                <p class="text-muted">The system compares encodings to find matches across the entire database.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <h5 class="mt-3">Understanding Match Results</h5>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Confidence Score</th>
+                                    <th>Interpretation</th>
+                                    <th>Action Recommended</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge bg-success">90-100%</span></td>
+                                    <td>Very High Confidence Match</td>
+                                    <td>Immediate investigation recommended</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-info">70-89%</span></td>
+                                    <td>High Confidence Match</td>
+                                    <td>Review by officer recommended</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-warning">50-69%</span></td>
+                                    <td>Moderate Confidence</td>
+                                    <td>Manual verification required</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-danger">Below 50%</span></td>
+                                    <td>Low Confidence</td>
+                                    <td>Likely different person</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <h5 class="mt-4">Best Practices for AI Matching</h5>
+                    <ul>
+                        <li>Use clear, front-facing photos when registering cases</li>
+                        <li>Ensure good lighting in uploaded images</li>
+                        <li>Upload multiple angles when available</li>
+                        <li>For CCTV footage, extract clear frames before upload</li>
+                        <li>Regularly update the face database with new cases</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <h3 class="fw-bold mb-4">Frequently Asked Questions</h3>
+            
+            <div class="accordion" id="faqAccordion">
+                <!-- FAQ 1 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                            How accurate is the face recognition system?
+                        </button>
+                    </h2>
+                    <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            The face recognition system achieves 99.7% accuracy under optimal conditions. Accuracy may vary based on image quality, lighting, and angle. The system provides confidence scores with each match to help users interpret results appropriately.
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- FAQ 2 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                            Is my personal information secure?
+                        </button>
+                    </h2>
+                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Yes, FaceTrace uses encrypted connections and follows data protection guidelines. Personal information is only accessible to authorized law enforcement personnel. Citizens can only view public statistics and their own complaint history.
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- FAQ 3 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                            How long does it take to process CCTV footage?
+                        </button>
+                    </h2>
+                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Processing time depends on the length of footage and number of faces detected. Typical processing: 5-10 minutes for 1 hour of footage. The system processes frames in real-time and provides results as they become available.
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- FAQ 4 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                            Can I update a complaint after submission?
+                        </button>
+                    </h2>
+                    <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Currently, complaints cannot be edited after submission to maintain data integrity. If you need to provide additional information, please file a new complaint referencing the original case ID, or contact law enforcement directly.
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- FAQ 5 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                            What happens when a missing person is found?
+                        </button>
+                    </h2>
+                    <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            When a missing person is found, law enforcement updates the case status to "Found". The case remains in the system for record-keeping but is marked as resolved. Associated complaints are automatically closed.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+<!-- Custom Styles -->
+<style>
+    .hover-shadow {
+        transition: all 0.3s ease;
+    }
+    .hover-shadow:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+    }
+    .accordion-button:not(.collapsed) {
+        background-color: #e7f1ff;
+        color: #1e3c72;
+    }
+    .btn-primary {
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        border: none;
+    }
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #16315c 0%, #1e3c72 100%);
+    }
+</style>
+{% endblock %}

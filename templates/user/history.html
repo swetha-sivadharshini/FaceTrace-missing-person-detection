@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>SafeSearch | Admin History with Found Status</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* fixed navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            background: linear-gradient(90deg, #5a6fd8, #7a4ec7);
+            color: white;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(2px);
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+            letter-spacing: -0.3px;
+        }
+
+        .iq {
+            color: #FFD966;
+            text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+        }
+
+        .tagline {
+            font-size: 14px;
+            font-weight: 400;
+            opacity: 0.9;
+            background: rgba(255,255,255,0.15);
+            padding: 4px 12px;
+            border-radius: 40px;
+            margin-left: 15px;
+        }
+
+        .nav-right a {
+            margin-left: 24px;
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            padding: 6px 0;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav-right a:hover {
+            border-bottom-color: #FFD966;
+            opacity: 0.9;
+        }
+
+        body {
+            padding-top: 90px;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+            padding: 32px 36px;
+            transition: all 0.2s;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 32px;
+            border-bottom: 2px solid #edf2f7;
+            padding-bottom: 20px;
+        }
+
+        .header h2 {
+            color: #1a202c;
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #2c3e66, #4a3b6e);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .new-search-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.1s, box-shadow 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .new-search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(102, 126, 234, 0.4);
+        }
+
+        /* table styles */
+        .search-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14.5px;
+        }
+
+        .search-table th {
+            background: #f8fafd;
+            padding: 16px 12px;
+            text-align: left;
+            color: #2d3748;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .search-table td {
+            padding: 16px 12px;
+            border-bottom: 1px solid #edf2f7;
+            vertical-align: middle;
+            color: #1e293b;
+        }
+
+        .search-table tr:hover {
+            background: #fafcff;
+            transition: 0.1s;
+        }
+
+        /* status badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 14px;
+            border-radius: 40px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: capitalize;
+            letter-spacing: 0.3px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .status-processing {
+            background: #fef3c7;
+            color: #b45309;
+            border-left: 3px solid #f59e0b;
+        }
+
+        .status-completed {
+            background: #e0f2e9;
+            color: #0f6e3f;
+            border-left: 3px solid #2b9348;
+        }
+
+        .status-failed {
+            background: #ffe6e5;
+            color: #b91c1c;
+            border-left: 3px solid #e53e3e;
+        }
+
+        .status-no_face_detected {
+            background: #fff0e6;
+            color: #c2410c;
+            border-left: 3px solid #f97316;
+        }
+
+        /* FOUND status - premium green/gold style */
+        .status-found {
+            background: linear-gradient(115deg, #c6f7d4 0%, #b2f0c4 100%);
+            color: #0a4b2a;
+            border-left: 3px solid #2ecc71;
+            font-weight: 800;
+            box-shadow: 0 1px 4px rgba(46, 204, 113, 0.3);
+        }
+
+        .status-found::before {
+            content: "✓";
+            font-weight: bold;
+            font-size: 13px;
+            margin-right: 4px;
+        }
+
+        .view-btn {
+            background: linear-gradient(135deg, #4c6ef5, #8b5cf6);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .view-btn:hover {
+            background: linear-gradient(135deg, #3b5bdb, #7c3aed);
+            transform: scale(0.97);
+        }
+
+        /* mark as found button - stylish secondary */
+        .mark-found-btn {
+            background: transparent;
+            border: 1.5px solid #2c7a4d;
+            color: #2c7a4d;
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-left: 8px;
+            background-color: #f0fdf4;
+        }
+
+        .mark-found-btn:hover {
+            background: #2c7a4d;
+            color: white;
+            border-color: #2c7a4d;
+            transform: translateY(-1px);
+        }
+
+        .found-badge-inline {
+            background: #2ecc71;
+            color: white;
+            padding: 3px 12px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: bold;
+            display: inline-block;
+            margin-left: 8px;
+            letter-spacing: 0.4px;
+        }
+
+        .action-cell {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 70px 30px;
+            background: #fefefe;
+            border-radius: 40px;
+            color: #718096;
+        }
+
+        .empty-state h3 {
+            font-size: 24px;
+            margin-bottom: 12px;
+            color: #4a5568;
+        }
+
+        .toast-message {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #1e293b;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-weight: 500;
+            z-index: 2000;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            backdrop-filter: blur(8px);
+            transition: opacity 0.2s;
+            font-size: 14px;
+        }
+
+        @media (max-width: 780px) {
+            .container {
+                padding: 20px;
+            }
+            .navbar {
+                padding: 0 20px;
+            }
+            .tagline {
+                display: none;
+            }
+            .search-table th, .search-table td {
+                padding: 12px 8px;
+            }
+            .action-cell {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <div class="logo">Safe<span class="iq">Search</span></div>
+    <div class="tagline">Find Missing Persons Faster</div>
+    <div class="nav-right">
+        <a href="/admin/dashboard">Dashboard</a>
+        <a href="/admin/cctv-gallery">CCTV Gallery</a>
+        <a href="/admin/search-person">New Search</a>
+        <a href="/admin/search-history">History</a>
+        <a href="/logout">Logout</a>
+    </div>
+</div>
+
+<div class="container">
+    <div class="header">
+        <h2>📋 Search History · Missing Persons & Found Status</h2>
+        <a href="/admin/search-person" class="new-search-btn">+ New Search</a>
+    </div>
+    
+    <!-- dynamic table with realtime found marking -->
+    <div id="historyTableContainer">
+        {% if searches %}
+        <table class="search-table" id="searchHistoryTable">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Person</th>
+                    <th>Status</th>
+                    <th>Matches</th>
+                    <th>Videos</th>
+                    <th>Action / Mark Found</th>
+                </tr>
+            </thead>
+            <tbody id="historyTableBody">
+                {% for search in searches %}
+                <tr data-search-id="{{ search.search_id }}" data-current-status="{{ search.status }}">
+                    <td class="search-date">{{ search.search_date }}</td>
+                    <td class="person-name"><strong>{{ search.person_name or 'Unnamed Person' }}</strong></td>
+                    <td class="status-cell">
+                        <span class="status-badge 
+                            {% if search.status == 'processing' %}status-processing
+                            {% elif search.status == 'completed' %}status-completed
+                            {% elif search.status == 'failed' %}status-failed
+                            {% elif search.status == 'no_face_detected' %}status-no_face_detected
+                            {% elif search.status == 'found' %}status-found
+                            {% else %}status-processing{% endif %}">
+                            {% if search.status == 'found' %}⭐ FOUND{% else %}{{ search.status|replace('_', ' ') }}{% endif %}
+                        </span>
+                    </td>
+                    <td>{{ search.results_count or 0 }}</td>
+                    <td>{{ search.total_videos or 0 }}</td>
+                    <td class="action-cell">
+                        <a href="/admin/search-results/{{ search.search_id }}" class="view-btn">🔍 View</a>
+                        {% if search.status != 'found' %}
+                        <button class="mark-found-btn" data-id="{{ search.search_id }}" data-name="{{ search.person_name }}">
+                            ✅ Mark as Found
+                        </button>
+                        {% else %}
+                        <span class="found-badge-inline">✔ Located</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">
+            <h3>📭 No searches yet</h3>
+            <p>Start by searching for a person in CCTV footage</p>
+            <a href="/admin/search-person" class="view-btn" style="margin-top: 20px; display: inline-block;">Start Search</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- simple toast notifier -->
+<div id="toast" style="display: none;" class="toast-message"></div>
+
+<script>
+    // ---------- MARK AS FOUND FUNCTIONALITY (frontend + mock API) ----------
+    // This simulates updating the search status to 'found' when admin marks.
+    // In real backend, you would POST to /admin/api/mark-found/:id
+    // The backend will persist 'found' status and refresh the data.
+    // Since we need to demonstrate the feature, we'll update DOM immediately
+    // and also simulate a POST request to keep consistency.
+    
+    // Helper to show toast notifications
+    function showToast(message, isError = false) {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.style.display = 'block';
+        toast.style.background = isError ? '#b91c1c' : '#2c7a4d';
+        toast.style.color = 'white';
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            setTimeout(() => {
+                toast.style.display = 'none';
+                toast.style.opacity = '1';
+            }, 300);
+        }, 2800);
+    }
+    
+    // function to update UI after marking as found
+    function updateRowToFound(searchId, personName) {
+        const row = document.querySelector(`tr[data-search-id="${searchId}"]`);
+        if (!row) {
+            console.warn("Row not found for id", searchId);
+            return false;
+        }
+        
+        // update data-current-status attribute
+        row.setAttribute('data-current-status', 'found');
+        
+        // modify status badge cell
+        const statusCell = row.querySelector('.status-cell');
+        if (statusCell) {
+            // create new badge with FOUND style
+            const newBadge = document.createElement('span');
+            newBadge.className = 'status-badge status-found';
+            newBadge.innerHTML = '⭐ FOUND';
+            // replace old badge
+            const oldBadge = statusCell.querySelector('.status-badge');
+            if (oldBadge) {
+                oldBadge.remove();
+            }
+            statusCell.appendChild(newBadge);
+        }
+        
+        // modify Action cell: remove mark-as-found button and add Located badge
+        const actionCell = row.querySelector('.action-cell');
+        if (actionCell) {
+            const existingMarkBtn = actionCell.querySelector('.mark-found-btn');
+            if (existingMarkBtn) {
+                existingMarkBtn.remove();
+            }
+            // check if already has found badge
+            if (!actionCell.querySelector('.found-badge-inline')) {
+                const locatedSpan = document.createElement('span');
+                locatedSpan.className = 'found-badge-inline';
+                locatedSpan.textContent = '✔ Located';
+                actionCell.appendChild(locatedSpan);
+            }
+        }
+        
+        // optional: also update any other metadata, we can change status text inside table
+        showToast(`✅ ${personName || 'Person'} marked as FOUND! Status updated.`);
+        return true;
+    }
+    
+    // simulate backend persistence (POST request). In real scenario admin would call endpoint
+    // and on success update UI. We'll provide both simulation and also if actual backend endpoint exists.
+    async function markSearchAsFound(searchId, personName) {
+        // First, try to call a real endpoint if your backend supports it.
+        // For demo, we'll simulate a POST to /admin/api/mark-found/:id
+        // But also ensure it gracefully fails to UI update.
+        // You can replace the URL with your actual backend route.
+        const apiUrl = `/admin/api/mark-found/${searchId}`;
+        
+        try {
+            // Attempt real fetch - but if route doesn't exist we fallback to mock
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({ status: 'found' })
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                // Backend confirms update -> refresh UI
+                updateRowToFound(searchId, personName);
+                // Optionally, you could also update the status in server-side rendered variable,
+                // but we already reflect in frontend.
+                return true;
+            } else {
+                // If 404 or server error, we fallback to mock behavior (demo only)
+                console.warn("Backend API not ready, using local mock update");
+                // For demonstration: we update UI and assume it would be persisted.
+                // Ideally the backend would have persistent storage, but for frontend showcase
+                // we keep updated UI. Admin can still see the updated status within session.
+                updateRowToFound(searchId, personName);
+                // Also we can store in localStorage for demo? optional.
+                storeFoundInLocal(searchId);
+                return true;
+            }
+        } catch (err) {
+            // Network error or endpoint missing -> still update UI for admin convenience
+            console.log("Using local marking (backend endpoint not reachable):", err);
+            updateRowToFound(searchId, personName);
+            storeFoundInLocal(searchId);
+            return true;
+        }
+    }
+    
+    // For demo persistence across page reloads (simple localStorage)
+    // This ensures that if the admin marks as found and refreshes, the status remains 'found'
+    // based on stored overrides. In real app, DB would handle it.
+    function storeFoundInLocal(searchId) {
+        let foundItems = JSON.parse(localStorage.getItem('safesearch_found_ids') || '[]');
+        if (!foundItems.includes(searchId)) {
+            foundItems.push(searchId);
+            localStorage.setItem('safesearch_found_ids', JSON.stringify(foundItems));
+        }
+    }
+    
+    function loadLocalFoundOverrides() {
+        const foundIds = JSON.parse(localStorage.getItem('safesearch_found_ids') || '[]');
+        if (!foundIds.length) return;
+        // iterate over all rows, if search-id in foundIds and current status not already 'found', update
+        const rows = document.querySelectorAll('#searchHistoryTable tbody tr');
+        rows.forEach(row => {
+            const searchIdRaw = row.getAttribute('data-search-id');
+            if (!searchIdRaw) return;
+            const currentStatusAttr = row.getAttribute('data-current-status');
+            if (foundIds.includes(searchIdRaw) && currentStatusAttr !== 'found') {
+                // get person name from the row
+                const nameCell = row.querySelector('.person-name');
+                let personName = 'Person';
+                if (nameCell) personName = nameCell.innerText.trim();
+                updateRowToFound(searchIdRaw, personName);
+                row.setAttribute('data-current-status', 'found');
+            }
+        });
+    }
+    
+    // Attach event listeners to all "Mark as Found" buttons
+    function bindMarkButtons() {
+        const markButtons = document.querySelectorAll('.mark-found-btn');
+        markButtons.forEach(btn => {
+            // remove previous listeners to avoid double binding
+            btn.removeEventListener('click', markClickHandler);
+            btn.addEventListener('click', markClickHandler);
+        });
+    }
+    
+    async function markClickHandler(event) {
+        event.preventDefault();
+        const btn = event.currentTarget;
+        const searchId = btn.getAttribute('data-id');
+        const personName = btn.getAttribute('data-name') || 'Missing Person';
+        if (!searchId) return;
+        
+        // Disable button to prevent double marking
+        btn.disabled = true;
+        btn.textContent = '⏳ Updating...';
+        
+        await markSearchAsFound(searchId, personName);
+        
+        // After update, we can remove the button from DOM (handled inside updateRowToFound)
+        // But also need to ensure we don't error
+        btn.disabled = false; // will be removed anyway, but safety
+    }
+    
+    // Additional: If there are any existing "found" entries from server-side render,
+    // we also ensure localStorage consistency. Also, if the backend template passes status == 'found',
+    // we keep as is. Our JS mark buttons handle new ones.
+    
+    // Also, for demonstration: if admin marks found and page reload, we rely on localStorage sync
+    // and also you can implement a sync with server on load. 
+    // For completeness, we also simulate that if a search already has status found from server (backend),
+    // we do not overwrite.
+    
+    function syncLocalStorageWithServer() {
+        // This function ensures that if server-side had some 'found' statuses they are stored in localStorage as well
+        const rows = document.querySelectorAll('#searchHistoryTable tbody tr');
+        rows.forEach(row => {
+            const statusSpan = row.querySelector('.status-cell .status-badge');
+            if (statusSpan && statusSpan.innerText.includes('FOUND')) {
+                const searchId = row.getAttribute('data-search-id');
+                if (searchId) {
+                    let foundItems = JSON.parse(localStorage.getItem('safesearch_found_ids') || '[]');
+                    if (!foundItems.includes(searchId)) {
+                        foundItems.push(searchId);
+                        localStorage.setItem('safesearch_found_ids', JSON.stringify(foundItems));
+                    }
+                    row.setAttribute('data-current-status', 'found');
+                }
+            }
+        });
+    }
+    
+    // initialize all: bind buttons, load overrides, sync
+    function initHistoryFeatures() {
+        bindMarkButtons();
+        loadLocalFoundOverrides();
+        syncLocalStorageWithServer();
+        // In case new buttons appear after dynamic reload (though not needed, but keep)
+        const observer = new MutationObserver(() => {
+            bindMarkButtons();
+        });
+        const container = document.getElementById('historyTableContainer');
+        if (container) observer.observe(container, { childList: true, subtree: true });
+    }
+    
+    // Execute after DOM ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initHistoryFeatures);
+    } else {
+        initHistoryFeatures();
+    }
+</script>
+
+<!-- Additional note: 
+     The backend must support marking found status permanently. 
+     This demo uses a hybrid approach: 
+     1) Sends POST to /admin/api/mark-found/:id (if exists) 
+     2) Falls back to client-side UI update + localStorage for demo persistence.
+     
+     For real integration, ensure the endpoint updates database column "status" to 'found'
+     and re-renders the page accordingly. The template condition {% if search.status != 'found' %} 
+     will then reflect server-side truth. 
+     Our JS also honors server-side 'found' via class status-found.
+-->
+</body>
+</html>

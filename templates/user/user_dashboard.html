@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% include "sidebar.html" %}
+
+{% block content %}
+<div class="row my-4">
+    <div class="col-12">
+
+        <h2 class="mb-4">
+            <i class="fas fa-tachometer-alt me-2"></i>User Home
+        </h2>
+
+        <!-- ✅ WELCOME -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h4>👋 Welcome, {{ session.get('username','User') }}</h4>
+                <p>
+                    Welcome to FaceTrace. You can monitor, track, and manage missing person cases using AI-powered tools.
+                </p>
+            </div>
+        </div>
+
+        <!-- ✅ ABOUT -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h4 class="card-title">About FaceTrace</h4>
+                <p class="card-text">
+                    FaceTrace is an AI-powered platform designed to help locate missing persons using facial recognition technology, CCTV video analysis, and smart data matching. 
+                    It enables faster identification and improves coordination between users and authorities.
+                </p>
+            </div>
+        </div>
+
+        <!-- ✅ USER ACCESS -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h4>What You Can Do</h4>
+                <ul>
+                    <li>Register missing person complaints</li>
+                    <li>Track complaint status</li>
+                    <li>Upload images for face matching</li>
+                    <li>View match results from CCTV analysis</li>
+                    <li>Manage your profile</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- FOOTER (UNCHANGED) -->
+<footer style="background: linear-gradient(135deg,#1e3c72 0%,#2a5298 100%); color:white;" class="pt-5 pb-3 mt-5">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold">
+                    <i class="fas fa-search me-2"></i> FaceTrace
+                </h5>
+                <p>AI Powered Missing Person Detection System</p>
+                <p class="small">
+                    This is a demonstration system for Final Year Project.
+                    All data is synthetic.
+                </p>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <h6 class="fw-bold">Quick Links</h6>
+                <ul class="list-unstyled">
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                    <li><a href="{{ url_for('register') }}">Register</a></li>
+                </ul>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <h6 class="fw-bold">System Features</h6>
+                <ul class="list-unstyled">
+                    <li>✓ Face Detection & Recognition</li>
+                    <li>✓ Fuzzy Text Matching</li>
+                    <li>✓ CCTV Integration</li>
+                    <li>✓ Real-time Search</li>
+                </ul>
+            </div>
+
+        </div>
+
+        <hr style="border-color:rgba(255,255,255,0.3);">
+
+        <div class="text-center">
+            <p class="mb-1 small">
+                © 2026 FaceTrace – AI Powered Missing Person Detection System
+            </p>
+            <p class="small">
+                Final Year Project | For Demonstration Purposes
+            </p>
+        </div>
+    </div>
+</footer>
+
+{% endblock %}
