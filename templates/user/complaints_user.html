@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% include "sidebar.html" %}
+
+{% block content %}
+<div class="container my-4">
+    <h2 class="mb-3">
+        <i class="fas fa-user-shield me-2"></i> Missing Person Complaint Form
+    </h2>
+    <p class="text-muted">Filed by relative / guardian</p>
+    <hr>
+
+    <div class="card shadow-lg border-0">
+        <div class="card-body p-4">
+<form method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="camera_id" value="cam001">
+
+                <!-- Missing Person Details -->
+                <h5 class="mb-3 text-primary">👤 Missing Person Details</h5>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Age</label>
+                        <input type="number" class="form-control" name="age" required>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Gender</label>
+                        <select class="form-select" name="gender" required>
+                            <option value="">Select</option>
+                            <option>Male</option>
+                            <option>Female</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Photo Upload -->
+<div class="mb-3">
+    <label class="form-label">
+        Upload Photo <span class="text-danger">*</span>
+    </label>
+
+    <input type="file"
+           class="form-control"
+           name="photo"
+           accept="image/png, image/jpeg, image/jpg"
+           required>
+
+    <small class="text-muted">
+        Allowed formats: JPG, JPEG, PNG (Max size: 5MB)
+    </small>
+</div>
+
+               <!-- Description (OPTIONAL NOW) -->
+<div class="mb-3">
+    <label class="form-label">Description</label>
+    <textarea class="form-control" name="description" rows="3"
+        placeholder="Clothes, height, behavior, etc."></textarea>
+</div>
+
+<!-- Identifying Marks (OPTIONAL) -->
+<div class="mb-3">
+    <label class="form-label">Identifying Marks</label>
+    <textarea class="form-control" name="marks" rows="2"
+        placeholder="Tattoo, scar, birthmark, etc."></textarea>
+</div>
+                <!-- Last Seen -->
+                <h5 class="mt-4 mb-3 text-primary">📍 Last Seen Details</h5>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Last Seen Location</label>
+                        <input type="text" class="form-control" name="location" required>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Last Seen Date</label>
+                        <input type="date" class="form-control" name="date" required>
+                    </div>
+                </div>
+
+                <!-- Relative Details -->
+                <h5 class="mt-4 mb-3 text-success">👨‍👩‍👧 Relative / Complainant Details</h5>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Your Name</label>
+                        <input type="text" class="form-control" name="reporter_name" required>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Relationship</label>
+                        <select class="form-select" name="relationship" required>
+                            <option value="">Select</option>
+                            <option>Father</option>
+                            <option>Mother</option>
+                            <option>Brother</option>
+                            <option>Sister</option>
+                            <option>Friend</option>
+                            <option>Guardian</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Phone Number</label>
+                        <input type="tel" class="form-control" name="phone" required>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-control" name="email">
+                    </div>
+                </div>
+
+                <!-- Address -->
+                <div class="mb-3">
+                    <label class="form-label">Address</label>
+                    <textarea class="form-control" name="address" rows="2" required></textarea>
+                </div>
+
+                <!-- Submit -->
+                <div class="text-end mt-4">
+                    <button type="submit" class="btn btn-danger px-4">
+                        <i class="fas fa-paper-plane me-2"></i> Submit Complaint
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
