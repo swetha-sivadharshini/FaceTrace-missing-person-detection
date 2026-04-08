@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>FaceTrace | CCTV Video Gallery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Modern navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(12px);
+            color: white;
+            z-index: 1000;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #ffffff, #c084fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .iq {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+        }
+
+        .tagline {
+            margin-left: 12px;
+            font-size: 13px;
+            opacity: 0.8;
+            background: rgba(255,255,255,0.15);
+            padding: 4px 10px;
+            border-radius: 40px;
+            letter-spacing: 0.3px;
+        }
+
+        .nav-right a {
+            margin-left: 28px;
+            color: #e2e8f0;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            padding: 6px 0;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav-right a:hover {
+            color: white;
+            border-bottom-color: #c084fc;
+        }
+
+        body {
+            padding-top: 90px;
+        }
+
+        /* main container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.96);
+            border-radius: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.4);
+            padding: 28px 32px;
+            transition: all 0.2s;
+        }
+
+        /* header + stats */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header h2 {
+            color: #0f172a;
+            font-size: 28px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header h2:before {
+            content: "🎥";
+            font-size: 32px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .upload-btn, .refresh-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.25s;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .upload-btn {
+            background: linear-gradient(105deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            box-shadow: 0 4px 8px rgba(79, 70, 229, 0.25);
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px -8px rgba(79, 70, 229, 0.4);
+        }
+
+        .refresh-btn {
+            background: #1e293b;
+            color: #e2e8f0;
+            border: 1px solid #334155;
+        }
+
+        .refresh-btn:hover {
+            background: #334155;
+            transform: translateY(-2px);
+        }
+        .edit-btn {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: rgba(37, 99, 235, 0.9);
+    color: white;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    z-index: 25;
+}
+
+.edit-btn:hover {
+    background: #1d4ed8;
+    transform: scale(1.05);
+}
+
+        /* stats bar */
+        .stats-bar {
+            background: #f1f5f9;
+            padding: 12px 20px;
+            border-radius: 60px;
+            margin-bottom: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #0f172a;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* UNIFORM GRID — ALL VIDEOS SAME SIZE */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 28px;
+            margin-top: 10px;
+        }
+
+        /* VIDEO CARD — fixed proportions, consistent dimensions */
+        .video-card {
+            background: #ffffff;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #eef2ff;
+            position: relative;
+        }
+
+        .video-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 24px 36px -12px rgba(0, 0, 0, 0.2);
+            border-color: #c4b5fd;
+        }
+
+        /* FIXED VIDEO CONTAINER — ensures every video preview has identical dimensions */
+        .video-wrapper {
+            position: relative;
+            background: #000000;
+            width: 100%;
+            aspect-ratio: 16 / 9;   /* all videos exactly same height/width ratio */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;      /* covers area uniformly, no distortion */
+            background: #0a0a0a;
+            display: block;
+            cursor: pointer;
+        }
+
+        /* uniform play overlay (optional) */
+        .video-wrapper::after {
+            content: "▶";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 48px;
+            height: 48px;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 22px;
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+            font-weight: bold;
+        }
+
+        .video-wrapper:hover::after {
+            opacity: 0.8;
+        }
+
+        /* Delete button - positioned absolute on top of video area */
+        .delete-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(220, 38, 38, 0.9);
+            backdrop-filter: blur(4px);
+            color: white;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            z-index: 25;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .delete-btn:hover {
+            background: #b91c1c;
+            transform: scale(1.05);
+        }
+
+        /* video info area - consistent padding */
+        .video-info {
+            padding: 16px 18px 20px 18px;
+            background: white;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .video-name {
+            font-weight: 700;
+            color: #0f172a;
+            font-size: 15px;
+            overflow-wrap: break-word;
+            word-break: break-word;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .video-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #475569;
+            font-size: 12px;
+            margin-top: 6px;
+            border-top: 1px solid #eef2ff;
+            padding-top: 10px;
+        }
+
+        .video-size {
+            background: #eef2ff;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 11px;
+            color: #4338ca;
+        }
+
+        .upload-date {
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* empty gallery state */
+        .empty-gallery {
+            text-align: center;
+            padding: 70px 30px;
+            background: #f8fafc;
+            border-radius: 48px;
+            grid-column: 1 / -1;
+        }
+
+        .empty-gallery i {
+            font-size: 72px;
+            color: #94a3b8;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .empty-gallery p {
+            color: #334155;
+            font-size: 1.2rem;
+            margin-bottom: 24px;
+        }
+
+        /* alerts */
+        .alert {
+            padding: 14px 20px;
+            border-radius: 60px;
+            margin-bottom: 24px;
+            font-weight: 500;
+            backdrop-filter: blur(4px);
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border-left: 5px solid #10b981;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border-left: 5px solid #ef4444;
+        }
+
+        /* modal refined */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 32px 28px;
+            border-radius: 32px;
+            max-width: 420px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 30px 40px rgba(0,0,0,0.3);
+        }
+
+        .modal-content h3 {
+            font-size: 24px;
+            margin-bottom: 12px;
+            color: #0f172a;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            margin-top: 24px;
+        }
+
+        .confirm-btn {
+            background: #dc2626;
+            color: white;
+            padding: 10px 26px;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .cancel-btn {
+            background: #94a3b8;
+            color: white;
+            padding: 10px 26px;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .confirm-btn:hover { background: #b91c1c; }
+        .cancel-btn:hover { background: #64748b; }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #e2e8f0;
+            border-top: 3px solid #4f46e5;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* responsive adjustments */
+        @media (max-width: 780px) {
+            .container { padding: 20px; }
+            .grid { gap: 20px; }
+            .stats-bar { flex-direction: column; align-items: flex-start; border-radius: 28px; }
+            .navbar { padding: 0 20px; }
+            .tagline { display: none; }
+        }
+
+        @media (max-width: 560px) {
+            .grid { grid-template-columns: 1fr; }
+            .video-wrapper { aspect-ratio: 16/9; }
+        }
+
+        /* smooth video controls */
+        video:focus {
+            outline: none;
+        }
+
+        /* custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #eef2ff; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #a78bfa; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <div style="display: flex; align-items: center;">
+        <div class="logo">Face<span class="iq">Trace</span></div>
+        <div class="tagline">AI-powered missing person intelligence</div>
+    </div>
+    <div class="nav-right">
+        <a href="{{ url_for('admin_home') }}">🏠 Home</a>
+        <a href="{{ url_for('search_person') }}">🔍 Search Person</a>
+        <a href="{{ url_for('cctv_upload') }}">📤 Upload CCTV</a>
+        
+    </div>
+</div>
+
+<div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="stats-bar">
+        <div class="stats">
+            <span class="stat-item">🎬 Total Videos: <strong>{{ videos|length }}</strong></span>
+            <span class="stat-item">💾 Total Size: <strong>{{ "%.2f"|format(videos|sum(attribute='size_mb')) }} MB</strong></span>
+        </div>
+        <a href="{{ url_for('cctv_gallery') }}" class="refresh-btn">
+            <span>🔄</span> Refresh Gallery
+        </a>
+    </div>
+
+    <div class="header">
+        <h2>CCTV Surveillance Gallery</h2>
+        <div class="header-actions">
+            <a href="{{ url_for('cctv_upload') }}" class="upload-btn">✨ + Upload New Video</a>
+        </div>
+    </div>
+
+    <div class="grid" id="videoGrid">
+        {% if videos %}
+            {% for video in videos %}
+            <div class="video-card" data-video-name="{{ video.name }}" data-video-id="{{ loop.index }}">
+                <!-- Delete button (consistent position) -->
+                <div class="delete-btn" onclick="event.stopPropagation(); showDeleteModal('{{ video.name }}')">✕</div>
+               <!-- edit button -->
+               <div class="edit-btn" onclick="event.stopPropagation(); showEditModal('{{ video.name }}')">✏️</div>
+                <!-- Video wrapper forces identical aspect ratio for every video -->
+                <div class="video-wrapper">
+                    <video controls preload="metadata">
+                        <source src="/static/videos/{{ video.name }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="video-info">
+                    <div class="video-name" title="{{ video.name }}">{{ video.name }}</div>
+                    <div class="video-meta">
+                        <span class="upload-date">📅 {{ video.upload_date }}</span>
+                        <span class="video-size">📀 {{ video.size_mb }} MB</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-gallery">
+                <i>🎥📭</i>
+                <p>No CCTV footage uploaded yet</p>
+                <a href="{{ url_for('cctv_upload') }}" class="upload-btn" style="background: linear-gradient(135deg, #4f46e5, #7c3aed);">+ Upload First Video</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Delete confirmation modal (modern) -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <h3>⚠️ Delete video</h3>
+        <p>Are you sure you want to permanently delete <strong id="videoNameDisplay"></strong>?</p>
+        <p style="color: #b91c1c; font-size: 13px; background: #fee2e2; padding: 6px; border-radius: 30px;">This action is irreversible!</p>
+        <div class="modal-actions">
+            <button onclick="confirmDelete()" class="confirm-btn">Yes, delete</button>
+            <button onclick="hideDeleteModal()" class="cancel-btn">Cancel</button>
+        </div>
+        <div id="deleteLoading" style="display: none; margin-top: 20px;">
+            <span class="loading"></span> Deleting footage...
+        </div>
+    </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <h3>✏️ Rename Video</h3>
+
+        <input 
+            type="text" 
+            id="newVideoName" 
+            placeholder="Enter new name"
+            style="width:100%; padding:10px; margin-top:15px; border-radius:10px; border:1px solid #ccc;"
+        >
+
+        <div class="modal-actions">
+            <button onclick="confirmEdit()" class="confirm-btn">Save</button>
+            <button onclick="hideEditModal()" class="cancel-btn">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let videoToDelete = null;
+    
+    function showDeleteModal(videoName) {
+        if (!videoName) return;
+        videoToDelete = videoName;
+        document.getElementById('videoNameDisplay').textContent = videoName;
+        document.getElementById('deleteModal').classList.add('active');
+        // reset UI inside modal
+        document.querySelector('#editModal .confirm-btn').style.display = 'inline-flex';
+        document.querySelector('.cancel-btn').style.display = 'inline-flex';
+        document.getElementById('deleteLoading').style.display = 'none';
+    }
+    
+    function hideDeleteModal() {
+        document.getElementById('deleteModal').classList.remove('active');
+        videoToDelete = null;
+        const loadingDiv = document.getElementById('deleteLoading');
+        if (loadingDiv) loadingDiv.style.display = 'none';
+        const confirmBtn = document.querySelector('#editModal .confirm-btn');
+        const cancelBtn = document.querySelector('.cancel-btn');
+        if (confirmBtn) confirmBtn.style.display = 'inline-flex';
+        if (cancelBtn) cancelBtn.style.display = 'inline-flex';
+    }
+    
+    function confirmDelete() {
+        if (!videoToDelete) return;
+        
+        // disable buttons and show spinner
+        const confirmBtn = document.querySelector('#editModal .confirm-btn');
+        const cancelBtn = document.querySelector('#editModal .cancel-btn');
+        const loadingSpan = document.getElementById('deleteLoading');
+        
+        confirmBtn.style.display = 'none';
+        cancelBtn.style.display = 'none';
+        loadingSpan.style.display = 'block';
+        
+        // Send delete request to backend endpoint
+        fetch('/admin/delete-video/' + encodeURIComponent(videoToDelete), {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Find the video card by data attribute (using video name)
+                const grid = document.getElementById('videoGrid');
+                const targetCard = document.querySelector(`.video-card[data-video-name="${CSS.escape(videoToDelete)}"]`);
+                
+                if (targetCard) {
+                    targetCard.remove();  // smoothly remove card
+                }
+                
+                // Update stats dynamically after deletion (without full reload)
+                updateStatsAfterDeletion();
+                
+                // If no videos left, show empty gallery nicely
+                const remainingCards = document.querySelectorAll('.video-card');
+                if (remainingCards.length === 0) {
+                    // replace grid content with empty gallery
+                    grid.innerHTML = `
+                        <div class="empty-gallery">
+                            <i>🎥📭</i>
+                            <p>No CCTV footage uploaded yet</p>
+                            <a href="{{ url_for('cctv_upload') }}" class="upload-btn" style="background: linear-gradient(135deg, #4f46e5, #7c3aed);">+ Upload First Video</a>
+                        </div>
+                    `;
+                }
+                
+                // flash success message
+                showFloatingAlert('✅ Video deleted successfully!', 'success');
+                hideDeleteModal();
+            } else {
+                showFloatingAlert('❌ Error: ' + (data.error || 'Could not delete video'), 'error');
+                hideDeleteModal();
+            }
+        })
+        .catch(error => {
+            console.error('Delete error:', error);
+            showFloatingAlert('⚠️ Network error: failed to delete video', 'error');
+            hideDeleteModal();
+        });
+    }
+    
+    // Helper: dynamically update stats (total videos & total size) after deletion
+    function updateStatsAfterDeletion() {
+        const videoCards = document.querySelectorAll('.video-card');
+        const totalVideos = videoCards.length;
+        
+        // compute total size from remaining cards
+        let totalSizeMB = 0;
+        videoCards.forEach(card => {
+            const sizeSpan = card.querySelector('.video-size');
+            if (sizeSpan) {
+                let sizeText = sizeSpan.innerText.replace('📀', '').replace('MB', '').trim();
+                let sizeVal = parseFloat(sizeText);
+                if (!isNaN(sizeVal)) totalSizeMB += sizeVal;
+            }
+        });
+        
+        // update stats bar
+        const statsContainer = document.querySelector('.stats');
+        if (statsContainer) {
+            statsContainer.innerHTML = `
+                <span class="stat-item">🎬 Total Videos: <strong>${totalVideos}</strong></span>
+                <span class="stat-item">💾 Total Size: <strong>${totalSizeMB.toFixed(2)} MB</strong></span>
+            `;
+        }
+        
+        // If stats bar outside also shows in header but we keep consistent
+        const altStatSpan = document.querySelector('.stats-bar .stats');
+        if (altStatSpan && altStatSpan !== statsContainer) {
+            // just in case, but above already updated main .stats container
+        }
+    }
+    
+    function showFloatingAlert(message, type) {
+        // create temporary alert div at top of container
+        const container = document.querySelector('.container');
+        const existingAlert = container.querySelector('.alert');
+        if (existingAlert) existingAlert.remove();
+        
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type}`;
+        alertDiv.textContent = message;
+        alertDiv.style.marginBottom = '20px';
+        alertDiv.style.animation = 'fadeSlide 0.3s ease';
+        // insert after flashed messages but before stats bar
+        const statsBar = document.querySelector('.stats-bar');
+        if (statsBar) {
+            container.insertBefore(alertDiv, statsBar);
+        } else {
+            container.prepend(alertDiv);
+        }
+        
+        setTimeout(() => {
+            alertDiv.style.opacity = '0';
+            alertDiv.style.transition = 'opacity 0.3s';
+            setTimeout(() => alertDiv.remove(), 300);
+        }, 3000);
+    }
+    
+    // close modal when clicking outside
+    window.onclick = function(event) {
+        const modal = document.getElementById('deleteModal');
+        if (event.target === modal) {
+            hideDeleteModal();
+        }
+    }
+    
+    // Add CSS animation for alert
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(-12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .alert { animation: fadeSlide 0.25s ease-out; }
+        .video-card video {
+            transition: transform 0.1s;
+        }
+    `;
+    document.head.appendChild(style);
+    
+    // ensure all videos have consistent playback and prevent layout shifts
+    document.addEventListener('DOMContentLoaded', () => {
+        // all video elements already inside .video-wrapper with fixed aspect
+        // for any video that might not have loaded metadata, keep wrapper uniform
+        const videos = document.querySelectorAll('.video-wrapper video');
+        videos.forEach(vid => {
+            vid.addEventListener('loadedmetadata', () => {
+                // keep wrapper consistent, no extra changes needed
+            });
+        });
+        
+        // optional: add console log for debugging uniformity
+        console.log('Gallery ready — all videos displayed with uniform 16:9 aspect ratio');
+    });
+let videoToEdit = null;
+
+function showEditModal(videoName) {
+    videoToEdit = videoName;
+    document.getElementById("newVideoName").value = videoName;
+    document.getElementById("editModal").classList.add("active");
+}
+
+function hideEditModal() {
+    document.getElementById("editModal").classList.remove("active");
+    videoToEdit = null;
+}
+
+function confirmEdit() {
+    const newName = document.getElementById("newVideoName").value;
+
+    if (!newName || !videoToEdit) return;
+
+    fetch('/admin/rename-video', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            old_name: videoToEdit,
+            new_name: newName
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            location.reload(); // simple refresh
+        } else {
+            alert("Error: " + data.error);
+        }
+    });
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Results</title>
+
+    <style>
+        body{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg,#667eea,#764ba2);
+            min-height:100vh;
+            padding:20px;
+        }
+
+        .navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:70px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 20px;
+    background:linear-gradient(90deg,#5a6fd8,#7a4ec7);
+    color:white;
+    z-index:1000;
+    box-sizing:border-box;
+}
+
+.nav-right{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+
+        .logo{
+            font-size:26px;
+            font-weight:bold;
+        }
+
+        .iq{
+            color:gold;
+        }
+
+        .nav-right a{
+    color:white;
+    text-decoration:none;
+    font-size:15px;
+    white-space:nowrap;
+}
+
+        body{
+            padding-top:80px;
+        }
+
+        .container{
+            max-width:1200px;
+            margin:auto;
+            background:white;
+            border-radius:20px;
+            box-shadow:0 20px 60px rgba(0,0,0,0.3);
+            padding:30px;
+        }
+
+        .header{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:30px;
+            border-bottom:2px solid #eee;
+            padding-bottom:15px;
+        }
+
+        .status-badge{
+            padding:5px 15px;
+            border-radius:20px;
+            font-weight:bold;
+            font-size:14px;
+        }
+
+        .status-processing{
+            background:#ffeaa7;
+            color:#6b4f00;
+        }
+
+        .status-completed{
+            background:#b8f7c5;
+            color:#0a4f2a;
+        }
+
+        .status-failed{
+            background:#ffd6d6;
+            color:#7a0000;
+        }
+
+        .search-info{
+            background:#f7f9fc;
+            padding:20px;
+            border-radius:10px;
+            margin-bottom:30px;
+        }
+
+        .progress-bar{
+            width:100%;
+            height:20px;
+            background:#e2e8f0;
+            border-radius:10px;
+            overflow:hidden;
+        }
+
+        .progress-fill{
+            height:100%;
+            background:linear-gradient(90deg,#667eea,#764ba2);
+        }
+
+        .results-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fill,minmax(350px,1fr));
+            gap:20px;
+        }
+
+        .result-card{
+            background:#f8fafc;
+            border-radius:10px;
+            padding:20px;
+            border-left:4px solid #667eea;
+        }
+
+        .video-name{
+            font-weight:bold;
+            margin-bottom:10px;
+        }
+
+        .view-btn{
+            display:inline-block;
+            margin-top:10px;
+            background:linear-gradient(135deg,#667eea,#764ba2);
+            color:white;
+            padding:8px 16px;
+            border-radius:6px;
+            text-decoration:none;
+        }
+
+        .no-results{
+            text-align:center;
+            padding:60px;
+            background:#f8fafc;
+            border-radius:10px;
+        }
+
+        img{
+            margin-top:10px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="navbar">
+        <span class="logo">🔍 Face<span class="iq">Trace</span></span>
+        <span class="tagline">Missing Person Matching System</span>
+     
+
+    <div class="nav-right">
+        <a href="/admin/dashboard">Dashboard</a>
+        <a href="/admin/cctv-gallery">CCTV Gallery</a>
+        <a href="/admin/search-person">New Search</a>
+        
+        <a href="/logout">Logout</a>
+    </div>
+</div>
+
+<div class="container">
+
+<div class="header">
+<h2>Search Results</h2>
+
+<span class="status-badge status-{{ search.status }}">
+{{ search.status|upper }}
+</span>
+
+</div>
+
+
+<div class="search-info">
+
+<h3>Search Details</h3>
+
+<p><strong>Person:</strong> {{ search.person_name or 'Unknown' }}</p>
+
+<p><strong>Age:</strong> {{ search.person_age or 'Not specified' }}</p>
+
+<p><strong>Gender:</strong> {{ search.person_gender or 'Not specified' }}</p>
+
+<p><strong>Date:</strong> {{ search.search_date }}</p>
+
+
+<h4>Uploaded Photo</h4>
+
+{% if search.photo_path %}
+
+<img src="/{{ search.photo_path }}" width="220" style="border-radius:10px;">
+
+{% else %}
+
+<p>No uploaded photo found</p>
+
+{% endif %}
+
+
+<p><strong>Progress:</strong> {{ [search.progress|int,100]|min }}%</p>
+
+<div class="progress-bar">
+<div class="progress-fill" style="width:{{ [search.progress|int,100]|min }}%"></div>
+</div>
+
+</div>
+
+
+<h3>Matches Found : {{ results|length }}</h3>
+
+
+<div class="results-grid">
+
+{% if results %}
+
+{% for result in results %}
+
+<div class="result-card">
+
+<div class="video-name">{{ result.video_file }}</div>
+
+
+{% if result.face_image_path %}
+<img src="{{ result.face_image_path }}" width="150" style="border-radius:10px;">
+{% endif %}
+
+
+<p><strong>Timestamp:</strong> {{ result.timestamp }}</p>
+
+<p><strong>Location:</strong> {{ result.location }}</p>
+
+<p><strong>Confidence:</strong> {{ (result.confidence*100)|int }}%</p>
+
+
+<video width="330" height="230" controls>
+<source src="{{ result.clip_path }}" type="video/mp4">
+</video>
+
+
+<br>
+
+<a href="{{ result.clip_path }}" class="view-btn" target="_blank">
+View Clip
+</a>
+
+</div>
+
+{% endfor %}
+
+{% else %}
+
+<div class="no-results">
+
+<h3>No Matches Found</h3>
+
+<p>The person was not detected in the CCTV videos.</p>
+
+<a href="/admin/search-person" class="view-btn">Start New Search</a>
+
+</div>
+
+{% endif %}
+
+</div>
+
+</div>
+
+
+{% if search.status == 'processing' %}
+
+<script>
+
+setTimeout(function(){
+location.reload();
+},10000);
+
+</script>
+
+{% endif %}
+
+</body>
+</html>

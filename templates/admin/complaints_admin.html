@@ -1,0 +1,421 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2><i class="fas fa-clipboard-list me-2"></i>Manage User Complaints</h2>
+<hr>
+<p class="text-muted mb-3"><i class="fas fa-info-circle"></i> This section only shows complaints submitted by registered users. Admin cases and anonymous complaints are managed separately.</p>
+
+<div class="card shadow-sm">
+<div class="card-body">
+
+<div class="table-responsive">
+
+<table class="table">
+<thead>
+<tr>
+<th>User</th>
+<th>Missing Person</th>
+<th>Location</th>
+<th>Status</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody>
+
+{% if complaints %}
+{% for complaint in complaints %}
+{# Filter out anonymous complaints (where user_name is None or 'Anonymous') #}
+{% if complaint.user_name and complaint.user_name != 'Anonymous' and complaint.user_id != 0 %}
+<tr>
+<td>{{ complaint.user_name }}</td>
+<td><strong>{{ complaint.name }}</strong></td>
+<td>{{ complaint.location }}</td>
+<td>
+{% if complaint.status == 'pending' %}
+<span class="badge bg-warning text-dark">Pending Review</span>
+{% elif complaint.status == 'accepted' %}
+<span class="badge bg-success">Accepted</span>
+{% elif complaint.status == 'rejected' %}
+<span class="badge bg-danger">Rejected</span>
+{% elif complaint.status == 'found' %}
+<span class="badge bg-info">Found</span>
+{% endif %}
+</td>
+<td>
+<button class="btn btn-sm btn-info"
+data-bs-toggle="modal"
+data-bs-target="#complaintModal{{ complaint.id }}">
+<i class="fas fa-eye"></i> View Details
+</button>
+
+{% if complaint.status == 'pending' %}
+<a href="{{ url_for('accept_complaint_old', complaint_id=complaint.id) }}"
+class="btn btn-sm btn-success"
+onclick="return confirm('Accept this complaint? It will be added to missing persons cases.')">
+<i class="fas fa-check"></i> Accept
+</a>
+<a href="{{ url_for('reject_complaint_old', complaint_id=complaint.id) }}"
+class="btn btn-sm btn-danger"
+onclick="return confirm('Reject this complaint?')">
+<i class="fas fa-times"></i> Reject
+</a>
+{% endif %}
+
+<!-- Delete Button -->
+<button class="btn btn-sm btn-outline-danger"
+onclick="deleteComplaint({{ complaint.id }}, '{{ complaint.name }}')">
+<i class="fas fa-trash-alt"></i> Delete
+</button>
+</td>
+</tr>
+
+<!-- MODAL with Photo, Download, and Delete -->
+<div class="modal fade"
+id="complaintModal{{ complaint.id }}"
+tabindex="-1">
+<div class="modal-dialog modal-lg">
+<div class="modal-content">
+<div class="modal-header bg-primary text-white">
+<h5 class="modal-title">
+<i class="fas fa-user-circle me-2"></i>
+User Complaint Details - {{ complaint.name }}
+</h5>
+<button type="button"
+class="btn-close btn-close-white"
+data-bs-dismiss="modal"></button>
+</div>
+<div class="modal-body">
+<div class="row">
+<!-- PERSON DETAILS -->
+<div class="col-md-6">
+<div class="card mb-3">
+<div class="card-header bg-light">
+<strong><i class="fas fa-user"></i> Missing Person Information</strong>
+</div>
+<div class="card-body">
+<p><strong>Name:</strong> {{ complaint.name }}</p>
+<p><strong>Age:</strong> {{ complaint.age or 'N/A' }}</p>
+<p><strong>Gender:</strong> {{ complaint.gender or 'N/A' }}</p>
+<p><strong>Last Seen Date:</strong> {{ complaint.date or 'N/A' }}</p>
+<p><strong>Location:</strong> {{ complaint.location or 'N/A' }}</p>
+{% if complaint.marks %}
+<p><strong>Identifying Marks:</strong><br>{{ complaint.marks }}</p>
+{% endif %}
+<p><strong>Description:</strong></p>
+<p class="text-muted">{{ complaint.description or 'No description provided' }}</p>
+</div>
+</div>
+
+<!-- REPORTER DETAILS -->
+<div class="card">
+<div class="card-header bg-light">
+<strong><i class="fas fa-user-friends"></i> Reporter Information</strong>
+</div>
+<div class="card-body">
+<p><strong>Name:</strong> {{ complaint.reporter_name or 'Not provided' }}</p>
+<p><strong>Relationship:</strong> {{ complaint.relationship or 'Not provided' }}</p>
+<p><strong>Phone:</strong> {{ complaint.phone or 'Not provided' }}</p>
+<p><strong>Email:</strong> {{ complaint.email or 'Not provided' }}</p>
+<p><strong>Address:</strong> {{ complaint.address or 'Not provided' }}</p>
+</div>
+</div>
+</div>
+
+<!-- PHOTO SECTION WITH DOWNLOAD BUTTON -->
+<div class="col-md-6">
+<div class="card mb-3">
+<div class="card-header bg-light">
+<strong><i class="fas fa-image"></i> Uploaded Photo</strong>
+</div>
+<div class="card-body text-center">
+{% if complaint.photo %}
+{% set photo_filename = complaint.photo.split('/')[-1] if '/' in complaint.photo else complaint.photo %}
+
+<img src="{{ url_for('static', filename='uploads/' + photo_filename) }}"
+class="img-fluid rounded mb-3 photo-display"
+style="max-height: 300px; object-fit: contain; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"
+onerror="this.onerror=null; this.src='/static/uploads/' + '{{ photo_filename }}'; this.onerror=function(){this.onerror=null; this.src='/static/' + '{{ photo_filename }}';};"
+alt="Photo of {{ complaint.name }}">
+
+<div class="mt-2">
+<a href="{{ url_for('download_complaint_photo', complaint_id=complaint.id) }}"
+class="btn btn-primary btn-sm me-2"
+download>
+<i class="fas fa-download"></i> Download Photo
+</a>
+
+
+</form>
+
+
+{% else %}
+<div class="alert alert-warning">
+<i class="fas fa-exclamation-triangle"></i> No photo uploaded with this complaint
+</div>
+
+
+{% endif %}
+</div>
+</div>
+
+<!-- COMPLAINT STATUS -->
+<div class="card mt-2">
+<div class="card-header bg-light">
+<strong><i class="fas fa-info-circle"></i> Complaint Information</strong>
+</div>
+<div class="card-body">
+<p><strong>Submitted By:</strong> {{ complaint.user_name }}</p>
+<p><strong>User ID:</strong> {{ complaint.user_id }}</p>
+<p><strong>Status:</strong>
+{% if complaint.status == 'pending' %}
+<span class="badge bg-warning">Pending Review</span>
+{% elif complaint.status == 'accepted' %}
+<span class="badge bg-success">Accepted - Added to Missing Persons</span>
+{% elif complaint.status == 'rejected' %}
+<span class="badge bg-danger">Rejected</span>
+{% elif complaint.status == 'found' %}
+<span class="badge bg-info">Found</span>
+{% endif %}
+</p>
+<p>
+<strong>Submitted Date:</strong>
+{{ complaint.created_at.strftime('%Y-%m-%d %H:%M') if complaint.created_at else 'N/A' }}
+</p>
+
+{% if complaint.admin_notes %}
+<p><strong>Admin Notes:</strong><br>{{ complaint.admin_notes }}</p>
+{% endif %}
+
+{% if complaint.status == 'accepted' %}
+<div class="alert alert-success mt-2">
+<i class="fas fa-check-circle"></i> This complaint has been accepted and the person has been added to missing persons cases.
+</div>
+{% endif %}
+
+{% if complaint.status == 'found' %}
+<div class="alert alert-info mt-2">
+<i class="fas fa-heart"></i> This person has been marked as FOUND! The reporter has been notified.
+</div>
+{% endif %}
+
+{% if complaint.status == 'rejected' %}
+<div class="alert alert-danger mt-2">
+<i class="fas fa-times-circle"></i> This complaint was rejected. The reporter has been notified.
+</div>
+{% endif %}
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="modal-footer">
+<button class="btn btn-secondary" data-bs-dismiss="modal">
+<i class="fas fa-times"></i> Close
+</button>
+
+
+
+{% if complaint.photo and complaint.status == 'accepted' %}
+<form action="{{ url_for('search_from_complaint_direct', complaint_id=complaint.id) }}"
+method="get"
+style="display: inline-block;">
+<button type="submit" class="btn btn-primary">
+<i class="fas fa-search-location"></i> Start Search
+</button>
+</form>
+{% endif %}
+</div>
+</div>
+</div>
+</div>
+
+{% endif %}
+{% endfor %}
+
+{% if complaints|selectattr('user_name')|selectattr('user_name', 'ne', 'Anonymous')|selectattr('user_id', 'ne', 0)|list|length == 0 %}
+<tr>
+<td colspan="5" class="text-center">
+<div class="alert alert-info">
+<i class="fas fa-info-circle"></i> No user complaints found. Only registered user complaints appear here.
+</div>
+</td>
+</tr>
+{% endif %}
+
+{% else %}
+<tr>
+<td colspan="5" class="text-center">
+<div class="alert alert-info">
+<i class="fas fa-info-circle"></i> No complaints found.
+</div>
+</td>
+</tr>
+{% endif %}
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div>
+
+<style>
+.modal-body {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.card {
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 1rem;
+}
+
+.card-header {
+    font-weight: 600;
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.btn-sm {
+    margin: 2px;
+}
+
+.table td, .table th {
+    vertical-align: middle;
+}
+
+.badge {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.6rem;
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.modal-content {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.img-fluid {
+    max-width: 100%;
+    height: auto;
+}
+
+.btn i {
+    margin-right: 5px;
+}
+
+.btn-primary.btn-sm i, .btn-success.btn-sm i, .btn-danger.btn-sm i {
+    margin-right: 5px;
+}
+
+.alert {
+    border-radius: 8px;
+}
+
+.card-body p {
+    margin-bottom: 0.5rem;
+}
+
+.card-body p strong {
+    min-width: 120px;
+    display: inline-block;
+}
+
+.btn-outline-danger {
+    border: 1px solid #dc3545;
+    color: #dc3545;
+}
+
+.btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: white;
+}
+</style>
+
+<script>
+// Function to delete complaint from table row
+function deleteComplaint(complaintId, complaintName) {
+    if (confirm(`Are you sure you want to delete the complaint for "${complaintName}"? This action cannot be undone.`)) {
+        fetch(`/admin/delete_complaint/${complaintId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(`Complaint for "${complaintName}" has been deleted successfully.`);
+                location.reload();
+            } else {
+                alert('Error deleting complaint: ' + (data.error || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while deleting the complaint.');
+        });
+    }
+}
+
+// Function to delete complaint from modal
+function deleteComplaintFromModal(complaintId, complaintName) {
+    if (confirm(`Are you sure you want to delete the complaint for "${complaintName}"? This will permanently remove all data including the photo.`)) {
+        // Close the modal first
+        const modal = bootstrap.Modal.getInstance(document.getElementById(`complaintModal${complaintId}`));
+        if (modal) {
+            modal.hide();
+        }
+        
+        // Perform the delete
+        fetch(`/admin/delete_complaint/${complaintId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(`Complaint for "${complaintName}" has been deleted successfully.`);
+                location.reload();
+            } else {
+                alert('Error deleting complaint: ' + (data.error || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while deleting the complaint.');
+        });
+    }
+}
+
+// Function to check photo path when modal opens
+document.addEventListener('DOMContentLoaded', function() {
+    // Add event listener to all modals
+    document.querySelectorAll('[data-bs-target^="#complaintModal"]').forEach(button => {
+        button.addEventListener('click', function() {
+            const modalId = this.getAttribute('data-bs-target');
+            setTimeout(() => {
+                const img = document.querySelector(`${modalId} .photo-display`);
+                if (img && img.complete && img.naturalWidth === 0) {
+                    console.log('Image failed to load, trying fallback paths');
+                    // Try alternative paths
+                    const imgSrc = img.getAttribute('src');
+                    if (imgSrc && imgSrc.includes('/static/uploads/')) {
+                        const filename = imgSrc.split('/').pop();
+                        img.src = `/static/${filename}`;
+                    }
+                }
+            }, 100);
+        });
+    });
+});
+</script>
+
+{% endblock %}

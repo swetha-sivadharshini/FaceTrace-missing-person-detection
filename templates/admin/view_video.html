@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Video</title>
+</head>
+<body>
+
+<h1>Video Viewer</h1>
+
+<video width="800" controls>
+    <source src="{{ video_path }}" type="video/mp4">
+</video>
+
+<p>Timestamp: {{ timestamp }}</p>
+
+<script>
+const video = document.querySelector("video");
+const timestamp = {{ timestamp }};
+
+video.addEventListener("loadedmetadata", function(){
+    video.currentTime = timestamp;
+});
+</script>
+
+</body>
+</html>

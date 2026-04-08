@@ -1,0 +1,815 @@
+{% extends "base.html" %}
+{% include "navbar.html" %}
+
+{% block content %}
+
+<div class="container my-5">
+
+<!-- Unified Cases & Complaints Management -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3>
+        <i class="fas fa-users me-2"></i>Missing Persons & Complaints Management
+        <span class="badge bg-primary ms-2">
+            {{ cases|length + complaints|length }}
+        </span>
+    </h3>
+    
+    <div>
+        <a href="{{ url_for('add_case') }}" class="btn btn-primary">
+            <i class="fas fa-plus-circle me-2"></i>Add Missing Person
+        </a>
+    </div>
+</div>
+
+<!-- Filter Buttons -->
+<div class="mb-4">
+    <div class="btn-group flex-wrap" role="group">
+        <button type="button" class="btn btn-outline-primary active" data-filter="all">
+            <i class="fas fa-list me-1"></i>All 
+            ({{ cases|length + complaints|length }})
+        </button>
+        <button type="button" class="btn btn-outline-warning" data-filter="missing">
+            <i class="fas fa-exclamation-triangle me-1"></i>Missing 
+            ({{ cases|selectattr('status', 'equalto', 'missing')|list|length +
+               complaints|selectattr('status', 'equalto', 'pending')|list|length }})
+        </button>
+        <button type="button" class="btn btn-outline-success" data-filter="accepted">
+            <i class="fas fa-check-circle me-1"></i>Accepted 
+            ({{ cases|selectattr('status', 'equalto', 'accepted')|list|length + 
+               complaints|selectattr('status', 'equalto', 'accepted')|list|length }})
+        </button>
+        <button type="button" class="btn btn-outline-info" data-filter="found">
+            <i class="fas fa-heart me-1"></i>Found 
+            ({{ cases|selectattr('status', 'equalto', 'found')|list|length + 
+               complaints|selectattr('status', 'equalto', 'found')|list|length }})
+        </button>
+        <button type="button" class="btn btn-outline-danger" data-filter="rejected">
+            <i class="fas fa-times-circle me-1"></i>Rejected 
+            ({{ cases|selectattr('status', 'equalto', 'rejected')|list|length + 
+               complaints|selectattr('status', 'equalto', 'rejected')|list|length }})
+        </button>
+    </div>
+</div>
+
+<div class="row" id="items-container">
+    {% if cases or complaints %}
+        
+        <!-- ==================== MISSING SECTION (Admin Cases) ==================== -->
+        {% for case in cases if case.status == "missing" %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4 item-card" data-type="case" data-status="missing">
+            <div class="card case-card shadow-sm h-100">
+                <div class="position-absolute top-0 end-0 m-2">
+                    <span class="badge bg-dark"><i class="fas fa-database"></i> Admin Case</span>
+                </div>
+                {% if case.photo and case.photo != 'None' %}
+                <img src="{{ url_for('static', filename='uploads/' + case.photo) }}" class="card-img-top case-img" onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'">
+                {% else %}
+                <img src="https://via.placeholder.com/400x300?text=No+Image" class="card-img-top case-img">
+                {% endif %}
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="card-title mb-0">{{ case.name }}</h5>
+                        <span class="badge bg-warning"><i class="fas fa-exclamation-triangle"></i> Missing</span>
+                    </div>
+                    <p class="text-muted mb-1"><i class="fas fa-user"></i> Age: {{ case.age }} | Gender: {{ case.gender if case.gender else 'N/A' }}</p>
+                    <p class="text-muted mb-1"><i class="fas fa-map-marker-alt"></i> Last Seen: {{ case.last_seen_location }}</p>
+                    <p class="text-muted mb-2"><i class="fas fa-calendar"></i> Date: {{ case.last_seen_date }}</p>
+                </div>
+                <div class="card-footer text-center">
+                    <button type="button" class="btn btn-sm btn-primary" onclick="showCaseDetails({{ case.id }}, '{{ case.name }}', {{ case.age }}, '{{ case.gender }}', '{{ case.last_seen_location }}', '{{ case.last_seen_date }}', '{{ case.description }}', '{{ case.identifying_marks }}', '{{ case.photo }}')">
+                        <i class="fas fa-eye"></i> View
+                    </button>
+                    <button type="button" class="btn btn-sm btn-success" onclick="showMarkFoundModal({{ case.id }}, '{{ case.name }}', 'case', '')">
+                        <i class="fas fa-check-circle"></i> Mark Found
+                    </button>
+                    <a href="{{ url_for('delete_case', case_id=case.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this case?')">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        
+        <!-- ==================== MISSING SECTION (User Complaints - Pending) ==================== -->
+        {% for complaint in complaints if complaint.status == "pending" %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4 item-card" data-type="complaint" data-status="missing">
+            <div class="card complaint-card shadow-sm h-100">
+                <div class="position-absolute top-0 end-0 m-2">
+                    <span class="badge bg-info"><i class="fas fa-user"></i> User Complaint</span>
+                </div>
+                {% if complaint.photo and complaint.photo != 'None' %}
+                <img src="{{ url_for('static', filename=complaint.photo) }}" class="card-img-top complaint-img" onerror="this.src='https://via.placeholder.com/400x300?text=No+Photo'">
+                {% else %}
+                <img src="https://via.placeholder.com/400x300?text=No+Photo" class="card-img-top complaint-img">
+                {% endif %}
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="card-title mb-0">{{ complaint.name }}</h5>
+                        <span class="badge bg-warning"><i class="fas fa-clock"></i> Pending</span>
+                    </div>
+                    <p class="text-muted mb-1"><i class="fas fa-user"></i> Age: {{ complaint.age }} | Gender: {{ complaint.gender }}</p>
+                    <p class="text-muted mb-1"><i class="fas fa-map-marker-alt"></i> Last Seen: {{ complaint.location }}</p>
+                    <p class="text-muted mb-2"><i class="fas fa-calendar"></i> Date: {{ complaint.date }}</p>
+                    {% if complaint.reporter_name %}
+                    <p class="small text-muted"><i class="fas fa-user-friends"></i> Reported by: {{ complaint.reporter_name }}</p>
+                    {% endif %}
+                </div>
+                <div class="card-footer text-center">
+                    <button class="btn btn-sm btn-info" onclick="showComplaintDetails({{ complaint.id }}, '{{ complaint.name }}', {{ complaint.age }}, '{{ complaint.gender }}', '{{ complaint.location }}', '{{ complaint.date }}', '{{ complaint.reporter_name }}', '{{ complaint.photo }}', '{{ complaint.email }}', '{{ complaint.phone }}', '{{ complaint.relationship }}', '{{ complaint.address }}', '{{ complaint.description }}', '{{ complaint.marks }}')">
+                        <i class="fas fa-eye"></i> View
+                    </button>
+                    <button class="btn btn-sm btn-success" onclick="showMarkFoundModal({{ complaint.id }}, '{{ complaint.name }}', 'complaint', '{{ complaint.email }}')">
+                        <i class="fas fa-check-circle"></i> Mark Found
+                    </button>
+                    <button class="btn btn-sm btn-danger" onclick="deleteComplaint({{ complaint.id }})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        
+        <!-- ==================== ACCEPTED SECTION ==================== -->
+        {% for case in cases if case.status == "accepted" %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4 item-card" data-type="case" data-status="accepted">
+            <div class="card case-card shadow-sm h-100">
+                <div class="position-absolute top-0 end-0 m-2">
+                    <span class="badge bg-dark"><i class="fas fa-database"></i> Admin Case</span>
+                </div>
+                {% if case.photo and case.photo != 'None' %}
+                <img src="{{ url_for('static', filename='uploads/' + case.photo) }}" class="card-img-top case-img" onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'">
+                {% else %}
+                <img src="https://via.placeholder.com/400x300?text=No+Image" class="card-img-top case-img">
+                {% endif %}
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="card-title mb-0">{{ case.name }}</h5>
+                        <span class="badge bg-success"><i class="fas fa-check-circle"></i> Accepted</span>
+                    </div>
+                    <p class="text-muted mb-1"><i class="fas fa-user"></i> Age: {{ case.age }} | Gender: {{ case.gender if case.gender else 'N/A' }}</p>
+                    <p class="text-muted mb-1"><i class="fas fa-map-marker-alt"></i> Last Seen: {{ case.last_seen_location }}</p>
+                    <p class="text-muted mb-2"><i class="fas fa-calendar"></i> Date: {{ case.last_seen_date }}</p>
+                </div>
+                <div class="card-footer text-center">
+                    <button type="button" class="btn btn-sm btn-primary" onclick="showCaseDetails({{ case.id }}, '{{ case.name }}', {{ case.age }}, '{{ case.gender }}', '{{ case.last_seen_location }}', '{{ case.last_seen_date }}', '{{ case.description }}', '{{ case.identifying_marks }}', '{{ case.photo }}')">
+                        <i class="fas fa-eye"></i> View
+                    </button>
+                    <button type="button" class="btn btn-sm btn-success" onclick="showMarkFoundModal({{ case.id }}, '{{ case.name }}', 'case', '')">
+                        <i class="fas fa-check-circle"></i> Mark Found
+                    </button>
+                    <a href="{{ url_for('delete_case', case_id=case.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Delete this case?')">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        
+        <!-- Accepted Complaints -->
+        {% for complaint in complaints if complaint.status == "accepted" %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4 item-card" data-type="complaint" data-status="accepted">
+            <div class="card complaint-card shadow-sm h-100">
+                <div class="position-absolute top-0 end-0 m-2">
+                    <span class="badge bg-info"><i class="fas fa-user"></i> User Complaint</span>
+                </div>
+                {% if complaint.photo and complaint.photo != 'None' %}
+                <img src="{{ url_for('static', filename=complaint.photo) }}" class="card-img-top complaint-img" onerror="this.src='https://via.placeholder.com/400x300?text=No+Photo'">
+                {% else %}
+                <img src="https://via.placeholder.com/400x300?text=No+Photo" class="card-img-top complaint-img">
+                {% endif %}
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="card-title mb-0">{{ complaint.name }}</h5>
+                        <span class="badge bg-success"><i class="fas fa-check-circle"></i> Accepted</span>
+                    </div>
+                    <p class="text-muted mb-1"><i class="fas fa-user"></i> Age: {{ complaint.age }} | Gender: {{ complaint.gender }}</p>
+                    <p class="text-muted mb-1"><i class="fas fa-map-marker-alt"></i> Last Seen: {{ complaint.location }}</p>
+                    <p class="text-muted mb-2"><i class="fas fa-calendar"></i> Date: {{ complaint.date }}</p>
+                    {% if complaint.reporter_name %}
+                    <p class="small text-muted"><i class="fas fa-user-friends"></i> Reported by: {{ complaint.reporter_name }}</p>
+                    {% endif %}
+                </div>
+                <div class="card-footer text-center">
+                    <button class="btn btn-sm btn-info" onclick="showComplaintDetails({{ complaint.id }}, '{{ complaint.name }}', {{ complaint.age }}, '{{ complaint.gender }}', '{{ complaint.location }}', '{{ complaint.date }}', '{{ complaint.reporter_name }}', '{{ complaint.photo }}', '{{ complaint.email }}', '{{ complaint.phone }}', '{{ complaint.relationship }}', '{{ complaint.address }}', '{{ complaint.description }}', '{{ complaint.marks }}')">
+                        <i class="fas fa-eye"></i> View
+                    </button>
+                    <button class="btn btn-sm btn-success" onclick="showMarkFoundModal({{ complaint.id }}, '{{ complaint.name }}', 'complaint', '{{ complaint.email }}')">
+                        <i class="fas fa-check-circle"></i> Mark Found
+                    </button>
+                    <button class="btn btn-sm btn-danger" onclick="deleteComplaint({{ complaint.id }})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        
+        <!-- ==================== FOUND SECTION ==================== -->
+        {% for case in cases if case.status == "found" %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4 item-card" data-type="case" data-status="found">
+            <div class="card case-card shadow-sm h-100">
+                <div class="position-absolute top-0 end-0 m-2">
+                    <span class="badge bg-dark"><i class="fas fa-database"></i> Admin Case</span>
+                </div>
+                {% if case.photo and case.photo != 'None' %}
+                <img src="{{ url_for('static', filename='uploads/' + case.photo) }}" class="card-img-top case-img" onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'">
+                {% else %}
+                <img src="https://via.placeholder.com/400x300?text=No+Image" class="card-img-top case-img">
+                {% endif %}
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="card-title mb-0">{{ case.name }}</h5>
+                        <span class="badge bg-info"><i class="fas fa-heart"></i> Found</span>
+                    </div>
+                    <p class="text-muted mb-1"><i class="fas fa-user"></i> Age: {{ case.age }}</p>
+                    {% if case.found_location %}
+                    <p class="text-success small"><i class="fas fa-check-circle"></i> Found at: {{ case.found_location }}</p>
+                    {% endif %}
+                    {% if case.found_date %}
+                    <p class="text-success small"><i class="fas fa-calendar"></i> Found on: {{ case.found_date }}</p>
+                    {% endif %}
+                </div>
+                <div class="card-footer text-center">
+                    <button class="btn btn-sm btn-primary" onclick="showFoundDetails({{ case.id }}, '{{ case.name }}', {{ case.age }}, '{{ case.found_location }}', '{{ case.found_date }}', '{{ case.found_notes }}', '{{ case.photo }}')">
+                        <i class="fas fa-eye"></i> View
+                    </button>
+                    <a href="{{ url_for('delete_case', case_id=case.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Delete this case?')">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        
+        <!-- Found Complaints -->
+        {% for complaint in complaints if complaint.status == "found" %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4 item-card" data-type="complaint" data-status="found">
+            <div class="card complaint-card shadow-sm h-100">
+                <div class="position-absolute top-0 end-0 m-2">
+                    <span class="badge bg-info"><i class="fas fa-user"></i> User Complaint</span>
+                </div>
+                {% if complaint.photo and complaint.photo != 'None' %}
+                <img src="{{ url_for('static', filename=complaint.photo) }}" class="card-img-top complaint-img" onerror="this.src='https://via.placeholder.com/400x300?text=No+Photo'">
+                {% else %}
+                <img src="https://via.placeholder.com/400x300?text=No+Photo" class="card-img-top complaint-img">
+                {% endif %}
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="card-title mb-0">{{ complaint.name }}</h5>
+                        <span class="badge bg-info"><i class="fas fa-heart"></i> Found</span>
+                    </div>
+                    <p class="text-muted mb-1"><i class="fas fa-user"></i> Age: {{ complaint.age }}</p>
+                    {% if complaint.found_location %}
+                    <p class="text-success small"><i class="fas fa-check-circle"></i> Found at: {{ complaint.found_location }}</p>
+                    {% endif %}
+                    {% if complaint.found_date %}
+                    <p class="text-success small"><i class="fas fa-calendar"></i> Found on: {{ complaint.found_date }}</p>
+                    {% endif %}
+                    {% if complaint.reporter_name %}
+                    <p class="small text-muted"><i class="fas fa-user-friends"></i> Reported by: {{ complaint.reporter_name }}</p>
+                    {% endif %}
+                </div>
+                <div class="card-footer text-center">
+                    <button class="btn btn-sm btn-danger" onclick="deleteComplaint({{ complaint.id }})">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        
+        <!-- ==================== REJECTED SECTION ==================== -->
+        {% for complaint in complaints if complaint.status == "rejected" %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4 item-card" data-type="complaint" data-status="rejected">
+            <div class="card complaint-card shadow-sm h-100">
+                <div class="position-absolute top-0 end-0 m-2">
+                    <span class="badge bg-danger"><i class="fas fa-times-circle"></i> Rejected</span>
+                </div>
+                {% if complaint.photo and complaint.photo != 'None' %}
+                <img src="{{ url_for('static', filename=complaint.photo) }}" class="card-img-top complaint-img" onerror="this.src='https://via.placeholder.com/400x300?text=No+Photo'">
+                {% else %}
+                <img src="https://via.placeholder.com/400x300?text=No+Photo" class="card-img-top complaint-img">
+                {% endif %}
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="card-title mb-0">{{ complaint.name }}</h5>
+                        <span class="badge bg-danger"><i class="fas fa-times-circle"></i> Rejected</span>
+                    </div>
+                    <p class="text-muted"><i class="fas fa-user"></i> Age: {{ complaint.age }}</p>
+                    <p class="small text-muted"><i class="fas fa-user-friends"></i> Reported by: {{ complaint.reporter_name }}</p>
+                </div>
+                <div class="card-footer text-center">
+                    <button class="btn btn-sm btn-danger" onclick="deleteComplaint({{ complaint.id }})">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        
+    {% else %}
+        <div class="col-12 text-center">
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>
+                <h5 class="mb-0">No records available</h5>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+</div>
+
+<!-- Modal for Case Details -->
+<div class="modal fade" id="caseDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="caseDetailTitle">Case Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="caseDetailBody">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Edit Complaint -->
+<div class="modal fade" id="editComplaintModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form id="editComplaintForm" method="POST" enctype="multipart/form-data">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title">Edit Complaint Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs mb-3" id="complaintEditTabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#missingInfo">Missing Person Info</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#reporterInfo">Reporter Info</a>
+                        </li>
+                    </ul>
+                    
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="missingInfo">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Name *</label>
+                                    <input type="text" class="form-control" name="name" required>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label">Age</label>
+                                    <input type="number" class="form-control" name="age">
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label">Gender</label>
+                                    <select class="form-control" name="gender">
+                                        <option value="">Select</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Last Seen Location</label>
+                                    <input type="text" class="form-control" name="location">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Last Seen Date</label>
+                                    <input type="date" class="form-control" name="date">
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label class="form-label">Description</label>
+                                    <textarea class="form-control" name="description" rows="3"></textarea>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label class="form-label">Identifying Marks</label>
+                                    <textarea class="form-control" name="marks" rows="2"></textarea>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label class="form-label">Upload New Photo (optional)</label>
+                                    <input type="file" class="form-control" name="photo" accept="image/*">
+                                    <small class="text-muted">Leave empty to keep existing photo</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="reporterInfo">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Reporter Name</label>
+                                    <input type="text" class="form-control" name="reporter_name">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Relationship</label>
+                                    <input type="text" class="form-control" name="relationship">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Phone</label>
+                                    <input type="tel" class="form-control" name="phone">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" name="email">
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label class="form-label">Address</label>
+                                    <textarea class="form-control" name="address" rows="2"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-warning">Update Complaint</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Mark Found -->
+<div class="modal fade" id="markFoundModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="markFoundForm" method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title">Mark as Found</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="emailInfo" style="display: none;"></div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Where was this person found?</label>
+                        <input type="text" class="form-control" name="found_location" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Date Found</label>
+                        <input type="date" class="form-control" name="found_date" value="{{ current_date }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Additional Notes</label>
+                        <textarea class="form-control" name="found_notes" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="send_email" id="sendEmailCheckbox" value="yes" checked>
+                            <label class="form-check-label" for="sendEmailCheckbox">
+                                <i class="fas fa-envelope me-1"></i> Send email notification to reporter
+                            </label>
+                        </div>
+                        <small class="text-muted" id="emailHelpText">The reporter will receive an email notification about this update.</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success">Confirm Found</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+.case-card, .complaint-card {
+    border: none;
+    transition: 0.3s;
+    border-radius: 12px;
+    overflow: hidden;
+}
+.case-card:hover, .complaint-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+}
+.case-img, .complaint-img {
+    height: 220px;
+    object-fit: cover;
+}
+.card-footer {
+    background: white;
+    border-top: none;
+}
+.card-title {
+    font-weight: 600;
+}
+.badge {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.6rem;
+}
+.btn-group {
+    gap: 5px;
+}
+.item-card {
+    transition: all 0.3s ease;
+}
+.flex-wrap {
+    flex-wrap: wrap;
+}
+.modal-body img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+.table-borderless td, .table-borderless th {
+    padding: 0.5rem 0.25rem;
+    vertical-align: top;
+}
+.table-borderless th {
+    font-weight: 600;
+    width: 35%;
+}
+.btn-email {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+.btn-email:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+.nav-tabs .nav-link {
+    color: #495057;
+}
+.nav-tabs .nav-link.active {
+    font-weight: bold;
+    color: #ffc107;
+    border-bottom-color: #ffc107;
+}
+</style>
+
+<script>
+// Helper function to escape HTML
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Filter items by status
+document.querySelectorAll('[data-filter]').forEach(button => {
+    button.addEventListener('click', function() {
+        const filter = this.getAttribute('data-filter');
+        document.querySelectorAll('[data-filter]').forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+        document.querySelectorAll('.item-card').forEach(item => {
+            if (filter === 'all') {
+                item.style.display = 'block';
+            } else {
+                item.style.display = item.getAttribute('data-status') === filter ? 'block' : 'none';
+            }
+        });
+    });
+});
+
+function showCaseDetails(id, name, age, gender, location, date, description, marks, photo) {
+    const modalBody = document.getElementById('caseDetailBody');
+    let imageHtml = '';
+    
+    if (photo && photo !== 'None' && photo !== 'null' && photo !== '') {
+        imageHtml = `<img src="/static/uploads/${photo}" class="img-fluid rounded" style="max-height: 300px; object-fit: contain;" onerror="this.src='https://via.placeholder.com/300x300?text=No+Image'">`;
+    } else {
+        imageHtml = '<div class="alert alert-secondary text-center">No photo available</div>';
+    }
+    
+    modalBody.innerHTML = `
+        <div class="row">
+            <div class="col-md-6 text-center mb-3 mb-md-0">
+                ${imageHtml}
+            </div>
+            <div class="col-md-6">
+                <table class="table table-borderless">
+                     <tr><th style="width: 40%">Name:</th><td>${escapeHtml(name)}</td>
+                      </tr>
+                      <tr><th>Age:</th><td>${age || 'N/A'}</td></tr>
+                      <tr><th>Gender:</th><td>${gender || 'N/A'}</td></tr>
+                      <tr><th>Last Seen Location:</th><td>${escapeHtml(location)}</td></tr>
+                      <tr><th>Last Seen Date:</th><td>${date || 'N/A'}</td></tr>
+                    ${description ? `<tr><th>Description:</th><td>${escapeHtml(description)}</td></tr>` : ''}
+                    ${marks ? `<tr><th>Identifying Marks:</th><td>${escapeHtml(marks)}</td></tr>` : ''}
+                 </table>
+            </div>
+        </div>
+    `;
+    document.getElementById('caseDetailTitle').innerText = `${name} - Details`;
+    const modal = new bootstrap.Modal(document.getElementById('caseDetailModal'));
+    modal.show();
+}
+
+function showMarkFoundModal(id, name, type, reporterEmail) {
+    const form = document.getElementById('markFoundForm');
+    const emailInfoDiv = document.getElementById('emailInfo');
+    const emailHelpText = document.getElementById('emailHelpText');
+    
+    if (type === 'case') {
+        form.action = `/admin/mark_found/${id}`;
+        if (emailInfoDiv) {
+            emailInfoDiv.style.display = 'none';
+        }
+        if (emailHelpText) {
+            emailHelpText.innerHTML = 'If there are related complaints with email addresses, they will be notified.';
+        }
+    } else {
+        form.action = `/admin/mark_complaint_found/${id}`;
+        if (emailInfoDiv && reporterEmail && reporterEmail !== 'None' && reporterEmail !== '') {
+            emailInfoDiv.style.display = 'block';
+            emailInfoDiv.innerHTML = `
+                <div class="alert alert-info mb-3">
+                    <i class="fas fa-envelope me-2"></i>
+                    <strong>Reporter Email:</strong> ${reporterEmail}<br>
+                    <small>An email will be sent to this address when you confirm.</small>
+                </div>
+            `;
+        } else if (emailInfoDiv) {
+            emailInfoDiv.style.display = 'none';
+        }
+        if (emailHelpText) {
+            emailHelpText.innerHTML = 'The reporter will receive an email notification about this update.';
+        }
+    }
+    document.querySelector('#markFoundModal .modal-title').innerText = `Mark as Found: ${name}`;
+    const modal = new bootstrap.Modal(document.getElementById('markFoundModal'));
+    modal.show();
+}
+
+function showComplaintDetails(id, name, age, gender, location, date, reporter, photo, email, phone, relationship, address, description, marks) {
+    const modalBody = document.getElementById('caseDetailBody');
+    let imageHtml = '';
+    
+    if (photo && photo !== 'None' && photo !== 'null' && photo !== '') {
+        let imagePath = photo;
+        if (!photo.startsWith('/') && !photo.startsWith('http')) {
+            if (photo.startsWith('uploads/')) {
+                imagePath = `/static/${photo}`;
+            } else {
+                imagePath = `/static/uploads/${photo}`;
+            }
+        }
+        imageHtml = `<img src="${imagePath}" class="img-fluid rounded" style="max-height: 300px; object-fit: contain;" onerror="this.src='https://via.placeholder.com/300x300?text=No+Image'">`;
+    } else {
+        imageHtml = '<div class="alert alert-secondary text-center">No photo available</div>';
+    }
+    
+    modalBody.innerHTML = `
+        <div class="row">
+            <div class="col-md-6 text-center mb-3 mb-md-0">
+                ${imageHtml}
+            </div>
+            <div class="col-md-6">
+                <table class="table table-borderless">
+                    <tr><th>Name:</th><td>${escapeHtml(name)}</td>
+                    </tr>
+                    <tr><th>Age:</th><td>${age || 'N/A'}</td>
+                    </tr>
+                    <tr><th>Gender:</th><td>${gender || 'N/A'}</td>
+                    </tr>
+                    <tr><th>Last Seen Location:</th><td>${escapeHtml(location)}</td>
+                    </tr>
+                    <tr><th>Date:</th><td>${date || 'N/A'}</td>
+                    </tr>
+                    ${description ? `</tr><th>Description:</th><td>${escapeHtml(description)}</td></tr>` : ''}
+                    ${marks ? `</tr><th>Identifying Marks:</th><td>${escapeHtml(marks)}</td></tr>` : ''}
+                    <tr><th>Reported by:</th><td>${escapeHtml(reporter) || 'Anonymous'}</td>
+                    </tr>
+                    ${relationship ? `</tr><th>Relationship:</th><td>${escapeHtml(relationship)}</td></tr>` : ''}
+                    ${email ? `</tr><th>Email:</th><td><i class="fas fa-envelope me-1"></i> ${escapeHtml(email)}</td></tr>` : ''}
+                    ${phone ? `</tr><th>Phone:</th><td><i class="fas fa-phone me-1"></i> ${escapeHtml(phone)}</td></tr>` : ''}
+                    ${address ? `</tr><th>Address:</th><td>${escapeHtml(address)}</td></tr>` : ''}
+                 </table>
+                <div class="mt-3 d-flex gap-2">
+                    <button class="btn btn-sm btn-warning" onclick="openEditComplaintModal(${id}, '${escapeHtml(name)}', '${age}', '${escapeHtml(gender)}', '${escapeHtml(location)}', '${date}', '${escapeHtml(description)}', '${escapeHtml(marks)}', '${escapeHtml(reporter)}', '${escapeHtml(relationship)}', '${escapeHtml(phone)}', '${escapeHtml(email)}', '${escapeHtml(address)}')">
+                        <i class="fas fa-edit me-1"></i> Edit Details
+                    </button>
+                    ${email ? `
+                    <button class="btn btn-sm btn-email" onclick="sendEmailToReporter('${email}', '${escapeHtml(name)}', '${escapeHtml(reporter)}')">
+                        <i class="fas fa-paper-plane me-1"></i> Send Email
+                    </button>
+                    ` : ''}
+                </div>
+            </div>
+        </div>
+    `;
+    document.getElementById('caseDetailTitle').innerText = `${name} - Complaint Details`;
+    const modal = new bootstrap.Modal(document.getElementById('caseDetailModal'));
+    modal.show();
+}
+
+function openEditComplaintModal(id, name, age, gender, location, date, description, marks, reporter_name, relationship, phone, email, address) {
+    const form = document.getElementById('editComplaintForm');
+    form.action = `/admin/edit_complaint/${id}`;
+    
+    // Populate missing person info
+    form.querySelector('[name="name"]').value = name;
+    form.querySelector('[name="age"]').value = age;
+    form.querySelector('[name="gender"]').value = gender;
+    form.querySelector('[name="location"]').value = location;
+    form.querySelector('[name="date"]').value = date;
+    form.querySelector('[name="description"]').value = description || '';
+    form.querySelector('[name="marks"]').value = marks || '';
+    
+    // Populate reporter info
+    form.querySelector('[name="reporter_name"]').value = reporter_name || '';
+    form.querySelector('[name="relationship"]').value = relationship || '';
+    form.querySelector('[name="phone"]').value = phone || '';
+    form.querySelector('[name="email"]').value = email || '';
+    form.querySelector('[name="address"]').value = address || '';
+    
+    document.querySelector('#editComplaintModal .modal-title').innerText = `Edit Complaint: ${name}`;
+    const modal = new bootstrap.Modal(document.getElementById('editComplaintModal'));
+    modal.show();
+}
+
+// Single sendEmailToReporter function
+function sendEmailToReporter(email, personName, reporterName) {
+    console.log("Sending email to:", email);
+    console.log("Person:", personName);
+    console.log("Reporter:", reporterName);
+    
+    if (!email || email === 'None' || email === '') {
+        alert('No email address available for this reporter.');
+        return;
+    }
+    
+    if (confirm(`Send email notification to ${email} about ${personName}?`)) {
+        fetch('/admin/send_email_notification', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: email,
+                person_name: personName,
+                reporter_name: reporterName,
+                message: `This is regarding the missing person case for ${personName}. Please contact the authorities for more information.`
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(`Email sent to ${email} successfully!`);
+            } else {
+                alert('Error sending email: ' + (data.error || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while sending the email.');
+        });
+    }
+}
+
+function showFoundDetails(id, name, age, location, date, notes, photo) {
+    const modalBody = document.getElementById('caseDetailBody');
+    let imageHtml = '';
+    
+    if (photo && photo !== 'None' && photo !== 'null' && photo !== '') {
+        imageHtml = `<img src="/static/uploads/${photo}" class="img-fluid rounded" style="max-height: 300px; object-fit: contain;" onerror="this.src='https://via.placeholder.com/300x300?text=No+Image'">`;
+    } else {
+        imageHtml = '<div class="alert alert-secondary text-center">No photo available</div>';
+    }
+    
+    modalBody.innerHTML = `
+        <div class="row">
+            <div class="col-md-6 text-center mb-3 mb-md-0">
+                ${imageHtml}
+            </div>
+            <div class="col-md-6">
+                <table class="table table-borderless">
+                    <tr><th>Name:</th><td>${escapeHtml(name)}</td>
+                    </tr>
+                    <tr><th>Age:</th><td>${age || 'N/A'}</td>
+                    </tr>
+                    <tr><th>Found at:</th><td>${escapeHtml(location) || 'N/A'}</td>
+                    </tr>
+                    <tr><th>Found on:</th><td>${date || 'N/A'}</td>
+                    </tr>
+                    ${notes ? `</tr><th>Notes:</th><td>${escapeHtml(notes)}</td></tr>` : ''}
+                 </table>
+            </div>
+        </div>
+    `;
+    document.getElementById('caseDetailTitle').innerText = `${name} - Found Person Details`;
+    const modal = new bootstrap.Modal(document.getElementById('caseDetailModal'));
+    modal.show();
+}
+
+function deleteComplaint(complaintId) {
+    if (confirm('Delete this complaint? This cannot be undone.')) {
+        fetch(`/admin/delete_complaint/${complaintId}`, {
+            method: 'DELETE',
+            headers: {'Content-Type': 'application/json'}
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) location.reload();
+            else alert('Error: ' + data.error);
+        })
+        .catch(error => alert('Error deleting complaint'));
+    }
+}
+</script>
+
+{% endblock %}
