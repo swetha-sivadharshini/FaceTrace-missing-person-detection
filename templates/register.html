@@ -1,0 +1,391 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+.main-container{
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:calc(100vh - 80px);
+padding:2rem;
+background:white;
+}
+
+.register-card{
+display:flex;
+border-radius:20px;
+max-width:1100px;
+width:100%;
+overflow:hidden;
+box-shadow:0 20px 40px rgba(0,0,0,0.15);
+}
+
+/* LEFT SIDE */
+
+.features-section{
+background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+padding:3rem 2.5rem;
+color:white;
+flex:1;
+display:flex;
+flex-direction:column;
+justify-content:center;
+}
+
+.features-section h2{
+font-size:2.2rem;
+font-weight:bold;
+margin-bottom:1rem;
+}
+
+.subtitle{
+font-size:1rem;
+opacity:0.95;
+margin-bottom:2rem;
+line-height:1.6;
+}
+
+.feature-stats{
+display:flex;
+justify-content:space-between;
+margin:2rem 0;
+gap:1rem;
+}
+
+.stat-item{
+text-align:center;
+background:rgba(255,255,255,0.1);
+padding:1rem;
+border-radius:10px;
+flex:1;
+}
+
+.stat-number{
+font-size:1.8rem;
+font-weight:bold;
+display:block;
+}
+
+.stat-label{
+font-size:0.85rem;
+}
+
+.feature-list{
+list-style:none;
+margin-top:2rem;
+}
+
+.feature-list li{
+margin-bottom:1rem;
+}
+
+.feature-list li i{
+margin-right:10px;
+color:#ffd700;
+}
+
+/* RIGHT SIDE */
+
+.form-section{
+padding:3rem 2.5rem;
+flex:1;
+background:#07a8b7b5;
+}
+
+.form-section h3{
+color:#333;
+font-weight:bold;
+margin-bottom:0.5rem;
+font-size:2rem;
+}
+
+.form-control{
+border:1px solid #e0e0e0;
+border-radius:8px;
+padding:0.8rem 1rem;
+background:white;
+width:100%;
+}
+
+.btn-register{
+background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+border:none;
+border-radius:8px;
+padding:0.875rem;
+font-weight:600;
+color:white;
+width:100%;
+margin:1.5rem 0 1rem 0;
+}
+
+.login-link{
+text-align:center;
+margin:1rem 0;
+}
+
+.login-link a{
+color:#667eea;
+text-decoration:none;
+font-weight:600;
+}
+
+.terms-text{
+text-align:center;
+font-size:0.85rem;
+color:#888;
+margin-top:1.5rem;
+}
+
+.alert{
+border-radius:8px;
+margin-bottom:1.5rem;
+padding:1rem;
+}
+
+@media (max-width:768px){
+
+.register-card{
+flex-direction:column;
+}
+
+.features-section{
+padding:2rem;
+}
+
+.form-section{
+padding:2rem;
+}
+
+}
+</style>
+
+
+<div class="main-container">
+
+<div class="register-card">
+
+<!-- LEFT SIDE -->
+
+<div class="features-section">
+
+<h2>
+<i class="fas fa-search"></i> FaceTrace
+</h2>
+
+<p class="subtitle">
+Missing Person Matching System
+</p>
+
+<p class="subtitle">
+Advanced AI-powered system for finding missing persons using facial recognition and CCTV integration.
+</p>
+
+<div class="feature-stats">
+
+<div class="stat-item">
+<span class="stat-number">99.7%</span>
+<span class="stat-label">Accuracy</span>
+</div>
+
+<div class="stat-item">
+<span class="stat-number">24/7</span>
+<span class="stat-label">Search</span>
+</div>
+
+<div class="stat-item">
+<span class="stat-number">AI</span>
+<span class="stat-label">Powered</span>
+</div>
+
+</div>
+
+<ul class="feature-list">
+
+<li><i class="fas fa-check-circle"></i> Face Detection</li>
+
+<li><i class="fas fa-check-circle"></i> Fuzzy Matching</li>
+
+<li><i class="fas fa-check-circle"></i> CCTV Integration</li>
+
+<li><i class="fas fa-check-circle"></i> Real-time Search</li>
+
+</ul>
+
+</div>
+
+
+<!-- RIGHT SIDE -->
+
+<div class="form-section">
+
+<h3>Create Account</h3>
+
+<p class="text-muted">
+Join FaceTrace to start finding missing persons
+</p>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+
+<div class="alert alert-{{ category }}">
+{{ message }}
+</div>
+
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+
+<form method="POST" action="{{ url_for('register') }}">
+
+<div class="mb-4">
+<label class="form-label">Full Name</label>
+<input type="text" class="form-control" name="name" placeholder="Enter your full name" required>
+</div>
+
+<div class="mb-4">
+<label class="form-label">Email</label>
+<input type="email" class="form-control" name="email" placeholder="Enter your email" required>
+</div>
+
+<div class="mb-4">
+    <label class="form-label">Phone Number (Optional)</label>
+    <input type="tel" class="form-control" name="phone" placeholder="Enter phone number (optional)">
+</div>
+
+<div class="mb-4">
+<label class="form-label">Password</label>
+<input type="password" class="form-control" name="password" placeholder="Create password" required>
+</div>
+
+<button type="submit" class="btn-register">
+<i class="fas fa-user-plus me-2"></i>
+Create Account
+</button>
+
+<div class="login-link">
+Already have an account?
+<a href="{{ url_for('login') }}">Login here</a>
+</div>
+
+<div class="terms-text">
+By creating an account you agree to our Terms & Privacy Policy
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+<!-- FOOTER -->
+<footer style="background: linear-gradient(135deg,#1e3c72 0%,#2a5298 100%); color:white;" class="pt-5 pb-3 mt-5">
+
+    <div class="container">
+
+        <div class="row">
+
+            <!-- BRAND -->
+            <div class="col-md-4 mb-4">
+
+                <h5 class="fw-bold">
+                    <i class="fas fa-search me-2"></i> FaceTrace
+                </h5>
+
+                <p>AI Powered Missing Person Detection System</p>
+
+                <p class="small">
+                    This is a demonstration system for Final Year Project.
+                    All data is synthetic.
+                </p>
+
+            </div>
+        <!-- QUICK LINKS -->
+            <div class="col-md-4 mb-4">
+
+                <h6 class="fw-bold">Quick Links</h6>
+
+                <ul class="list-unstyled">
+
+                    <li>
+                        <a href="{{ url_for('login') }}">Login</a>
+                    </li>
+
+                    <li>
+                        <a href="{{ url_for('register') }}">Register</a>
+                    </li>
+
+
+                </ul>
+
+            </div>
+
+
+    
+
+            <!-- FEATURES -->
+            <div class="col-md-4 mb-4">
+
+                <h6 class="fw-bold">System Features</h6>
+
+                <ul class="list-unstyled">
+
+                    <li>✓ Face Detection & Recognition</li>
+                    <li>✓ Fuzzy Text Matching</li>
+                    <li>✓ CCTV Integration</li>
+                    <li>✓ Real-time Search</li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+        <hr style="border-color:rgba(255,255,255,0.3);">
+
+
+        <div class="text-center">
+
+            <p class="mb-1 small">
+                © 2026 FaceTrace – AI Powered Missing Person Detection System
+            </p>
+
+            <p class="small">
+                Final Year Project | For Demonstration Purposes
+            </p>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+<script>
+
+document.getElementById('togglePassword')?.addEventListener('click', function(){
+
+    const password = document.getElementById('password');
+
+    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+
+    password.setAttribute('type', type);
+
+    this.innerHTML = type === 'password'
+        ? '<i class="fas fa-eye"></i>'
+        : '<i class="fas fa-eye-slash"></i>';
+
+});
+
+</script>
+
+
+{% endblock %}
