@@ -1909,9 +1909,9 @@ def debug_cases():
         return jsonify(result)
 
 # ==================== USER ROUTES ====================
-@app.route('/user/dashboard')
+@app.route('/user/home')
 @login_required
-def user_dashboard():
+def user_home():
     if session.get('role') != 'user':
         return redirect(url_for('login'))
     with get_db() as conn:
@@ -1919,7 +1919,7 @@ def user_dashboard():
         total_found = conn.execute('SELECT COUNT(*) FROM cases WHERE status="found"').fetchone()[0]
      
         active_investigations = conn.execute('SELECT COUNT(*) FROM cases WHERE status="missing"').fetchone()[0]
-    return render_template('user/user_dashboard.html',
+    return render_template('user/user_home.html',
                            total_missing=total_missing,
                            total_found=total_found,
                            active_investigations=active_investigations)
