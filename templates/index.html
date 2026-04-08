@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Missing Person Search</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f6f9;
+            text-align: center;
+        }
+        .container {
+            background: white;
+            width: 400px;
+            margin: 50px auto;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+        }
+        input, select {
+            width: 90%;
+            padding: 8px;
+            margin: 8px 0;
+        }
+        button {
+            padding: 10px 20px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Missing Person Search</h2>
+
+    <form action="/search" method="POST" enctype="multipart/form-data">
+        
+        <input type="text" name="name" placeholder="Full Name" required>
+        
+        <input type="number" name="age" placeholder="Age" required>
+        
+        <select name="gender" required>
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select>
+
+        <input type="text" name="marks" placeholder="Identification Marks (mole, scar, etc)">
+        
+        <input type="file" name="photo" accept="image/*" required>
+
+        <button type="submit">Search in CCTV</button>
+    </form>
+</div>
+
+</body>
+</html>
