@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% include "sidebar.html" %}
+
+{% block content %}
+
+<div class="row my-4">
+    <div class="col-12">
+
+    <h2 class="mb-4">
+        <i class="fas fa-tachometer-alt me-2"></i>Admin Dashboard
+    </h2>
+
+    <!-- ABOUT SYSTEM -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h4 class="card-title">About FaceTrace</h4>
+            <p class="card-text">
+                FaceTrace is an AI-powered platform designed to help locate missing persons using facial recognition technology,
+                CCTV video scanning, and community reporting. The system enables law enforcement agencies and citizens to
+                collaborate efficiently to find missing individuals.
+            </p>
+        </div>
+    </div>
+
+    <!-- STATISTICS -->
+    <div class="row">
+
+        <!-- TOTAL MISSING CASES -->
+        <div class="col-md-3 mb-3">
+            <div class="card stat-card primary hover-shadow">
+                <div class="card-body">
+                    <h6 class="text-muted mb-2">Total Missing Cases</h6>
+                    <h2 class="mb-0">152</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOUND PERSONS -->
+        <div class="col-md-3 mb-3">
+            <div class="card stat-card success hover-shadow">
+                <div class="card-body">
+                    <h6 class="text-muted mb-2">Found Through FaceTrace</h6>
+                    <h2 class="mb-0">89</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACTIVE INVESTIGATIONS -->
+        <div class="col-md-3 mb-3">
+            <div class="card stat-card info hover-shadow">
+                <div class="card-body">
+                    <h6 class="text-muted mb-2">Active Investigations</h6>
+                    <h2 class="mb-0">63</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- CCTV VIDEOS -->
+        <div class="col-md-3 mb-3">
+            <div class="card stat-card warning hover-shadow">
+                <div class="card-body">
+                    <h6 class="text-muted mb-2">Total CCTV Videos</h6>
+                    <h2 class="mb-0">214</h2>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- FOOTER -->
+
+<footer style="background: linear-gradient(135deg,#1e3c72 0%,#2a5298 100%); color:white;" class="pt-5 pb-3 mt-5">
+
+<div class="container">
+
+
+<div class="row">
+
+    <!-- BRAND -->
+    <div class="col-md-4 mb-4">
+        <h5 class="fw-bold">
+            <i class="fas fa-search me-2"></i> FaceTrace
+        </h5>
+
+        <p>AI Powered Missing Person Detection System</p>
+
+        <p class="small">
+            This is a demonstration system for Final Year Project.
+            All data is synthetic.
+        </p>
+    </div>
+
+    <!-- QUICK LINKS -->
+    <div class="col-md-4 mb-4">
+        <h6 class="fw-bold">Quick Links</h6>
+
+        <ul class="list-unstyled">
+            <li>
+                <a href="{{ url_for('login') }}">Login</a>
+            </li>
+            <li>
+                <a href="{{ url_for('register') }}">Register</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- FEATURES -->
+    <div class="col-md-4 mb-4">
+
+        <h6 class="fw-bold">System Features</h6>
+
+        <ul class="list-unstyled">
+            <li>✓ Face Detection & Recognition</li>
+            <li>✓ Fuzzy Text Matching</li>
+            <li>✓ CCTV Integration</li>
+            <li>✓ Real-time Search</li>
+        </ul>
+
+    </div>
+
+</div>
+
+<hr style="border-color:rgba(255,255,255,0.3);">
+
+<div class="text-center">
+    <p class="mb-1 small">
+        © 2026 FaceTrace – AI Powered Missing Person Detection System
+    </p>
+
+    <p class="small">
+        Final Year Project | For Demonstration Purposes
+    </p>
+</div>
+
+</div>
+
+</footer>
+
+</div>
+{% endblock %}
