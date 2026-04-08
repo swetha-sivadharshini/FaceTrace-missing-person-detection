@@ -22,13 +22,13 @@ The objective of this project is to explore how **computer vision and AI techniq
 
 ## Features
 
-- User registration and login system
-- Missing person registration
-- CCTV video upload and processing
-- Face detection using OpenCV
-- Face comparison and matching
-- Admin dashboard for monitoring
-- Search history tracking
+-  User registration and login system
+-  Missing person registration
+-  CCTV video upload and processing
+-  Face detection using OpenCV
+-  Face comparison and matching
+-  Admin dashboard for monitoring
+-  Search history tracking
 
 ---
 
