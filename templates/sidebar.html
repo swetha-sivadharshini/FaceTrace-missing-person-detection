@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>FaceTrace Sidebar</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#f4f6fb;
+}
+
+/* VIOLET HEADER */
+.violet-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px; /* adjust if your header is taller */
+    background: #5a6fd8;
+    color: white;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    z-index: 1000;
+}
+
+/* MENU BUTTON */
+.menu-btn {
+    position: fixed;
+    top: 4px; /* just below the header (header height = 70px) */
+    left: 10px;
+    font-size: 20px;
+    background: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    z-index: 1001; /* above sidebar */
+}
+
+/* SIDEBAR */
+.side-menu{
+position:fixed;
+top:70px; /* below header */
+left:-260px;
+width:250px;
+height:calc(100vh - 70px); /* remaining height */
+background:white;
+border-radius:0 20px 20px 0;
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
+padding:20px 10px;
+transition:0.3s;
+z-index:1000;
+overflow-y:auto; /* scroll fix */
+}
+
+/* SCROLLBAR STYLE */
+.side-menu::-webkit-scrollbar{
+width:5px;
+}
+.side-menu::-webkit-scrollbar-thumb{
+background:#ccc;
+border-radius:10px;
+}
+
+/* MENU ITEMS */
+.menu-item{
+display:flex;
+align-items:center;
+gap:12px;
+padding:12px 15px;
+border-radius:10px;
+text-decoration:none;
+color:#333;
+font-weight:500;
+margin-bottom:5px;
+transition:0.2s;
+}
+
+.menu-item:hover{
+background:#eef2ff;
+}
+
+/* ACTIVE */
+.menu-item.active{
+background:#4f6df5;
+color:white;
+}
+
+/* LOGOUT */
+.logout{
+margin-top:20px;
+border-top:1px solid #ddd;
+padding-top:15px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- VIOLET HEADER -->
+<div class="violet-header">
+    <h1>FaceTrace</h1>
+</div>
+
+{% if session.get('role') %}
+
+<!-- MENU BUTTON -->
+<button class="menu-btn" onclick="toggleMenu()">
+<i class="fas fa-bars"></i>
+</button>
+
+<!-- SIDEBAR -->
+<div id="sideMenu" class="side-menu">
+
+{% if session.get('role') == 'admin' %}
+
+<!-- ADMIN MENU -->
+
+<a href="{{ url_for('admin_home') }}" class="menu-item">
+<i class="fas fa-home"></i> Home
+</a>
+
+<a href="{{ url_for('admin_dashboard') }}" class="menu-item">
+<i class="fas fa-chart-line"></i> Dashboard
+</a>
+
+<a href="{{ url_for('add_case') }}" class="menu-item">
+<i class="fas fa-plus"></i> Add Case
+</a>
+
+
+
+<a href="{{ url_for('all_cases') }}" class="menu-item">
+<i class="fas fa-list"></i> All Cases
+</a>
+
+<a href="{{ url_for('search_person') }}" class="menu-item">
+<i class="fas fa-search"></i> Search
+</a>
+
+<a href="{{ url_for('cctv_upload') }}" class="menu-item">
+<i class="fas fa-video"></i> Upload CCTV
+</a>
+
+<a href="{{ url_for('cctv_gallery') }}" class="menu-item">
+<i class="fas fa-images"></i> CCTV Gallery
+</a>
+
+<a href="{{ url_for('complaints_admin') }}" class="menu-item">
+<i class="fas fa-inbox"></i> All Complaints
+</a>
+
+
+
+
+{% else %}
+
+<!-- USER MENU -->
+
+<a href="{{ url_for('user_dashboard') }}" class="menu-item">
+<i class="fas fa-home"></i> Home
+</a>
+
+<a href="{{ url_for('register_complaint') }}" class="menu-item">
+<i class="fas fa-exclamation-triangle"></i> Complaint
+</a>
+
+<a href="{{ url_for('complaint_status') }}" class="menu-item">
+<i class="fas fa-clock"></i> Status
+</a>
+
+<a href="{{ url_for('history') }}" class="menu-item">
+<i class="fas fa-history"></i> History
+</a>
+
+<a href="{{ url_for('profile') }}" class="menu-item">
+<i class="fas fa-user"></i> Profile
+</a>
+
+<a href="{{ url_for('help') }}" class="menu-item">
+<i class="fas fa-question-circle"></i> Help
+</a>
+
+{% endif %}
+
+<!-- COMMON LOGOUT -->
+<a href="{{ url_for('logout') }}" class="menu-item logout">
+<i class="fas fa-sign-out-alt"></i> Logout
+</a>
+
+</div>
+
+{% endif %}
+
+<script>
+function toggleMenu(){
+let menu = document.getElementById("sideMenu");
+
+if(menu.style.left === "0px"){
+menu.style.left = "-260px";
+}
+else{
+menu.style.left = "0px";
+}
+}
+</script>
+
+</body>
+</html>
