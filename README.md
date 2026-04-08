@@ -8,32 +8,40 @@ AI-powered system that identifies missing persons by analyzing CCTV footage usin
 
 FaceTrace is a computer vision based system designed to help identify missing persons by analyzing CCTV video footage. The system allows users to register missing person details and upload CCTV videos. It then detects faces in the video frames and compares them with stored images to find potential matches.
 
+The system processes CCTV footage by extracting video frames, detecting faces using OpenCV, and comparing them with registered missing person images to identify potential matches.
+
 This project aims to assist authorities and organizations in locating missing individuals more efficiently using automated surveillance analysis.
+
+---
+## Academic Context
+
+This project was developed as part of my **B.Tech Final Year Project in Computer Science and Engineering**.
+The objective of this project is to explore how **computer vision and AI techniques** can assist in identifying missing persons by analyzing CCTV surveillance footage and detecting potential facial matches.
 
 ---
 
 ## Features
 
-• User registration and login system
-• Missing person registration
-• CCTV video upload and processing
-• Face detection using OpenCV
-• Face comparison and matching
-• Admin dashboard for monitoring
-• Search history tracking
+- User registration and login system
+- Missing person registration
+- CCTV video upload and processing
+- Face detection using OpenCV
+- Face comparison and matching
+- Admin dashboard for monitoring
+- Search history tracking
 
 ---
 
 ## Technologies Used
 
-• Python
-• Flask
-• OpenCV
-• NumPy
-• SQLite
-• HTML
-• CSS
-• JavaScript
+- Python
+- Flask
+- OpenCV
+- NumPy
+- SQLite
+- HTML
+- CSS
+- JavaScript
 
 ---
 
@@ -96,7 +104,7 @@ facetrace-missing-person-detection
 
 **Add Missing Person Case**
 
-![Add Case](screenshots/admin/add_missing_person_case.jpg)
+![Add Case](screenshots/admin/admin_add_case.jpg)
 
 ---
 
@@ -168,14 +176,16 @@ http://127.0.0.1:5000
 
 ## Future Improvements
 
-• Integration with deep learning face recognition models
-• Real-time CCTV camera integration
-• Cloud deployment
-• Mobile application support
-
+- Integration with deep learning face recognition models
+- Real-time CCTV camera integration
+- Cloud deployment
+- Mobile application support
 ---
 
 ## Author
 
-**Swetha Sivadharshini**
-Computer Science Student
+**Swetha Sivadharshini R**
+B.Tech – Computer Science and Engineering
+
+Final Year Project (2026)
+
