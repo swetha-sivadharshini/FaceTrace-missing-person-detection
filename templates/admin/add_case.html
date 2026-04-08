@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% include "navbar.html" %}
+{% include "sidebar.html" %}
+
+{% block content %}
+
+<div class="row my-4">
+
+    <div class="col-12">
+        <h2><i class="fas fa-plus-circle me-2"></i>Register New Missing Person Case</h2>
+        <hr>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+
+                <!-- IMPORTANT: enctype added for file upload -->
+                <form method="POST" action="{{ url_for('add_case') }}" enctype="multipart/form-data">
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+                            <label for="name" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="age" class="form-label">Age</label>
+                            <input type="number" class="form-control" id="age" name="age" required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="gender" class="form-label">Gender</label>
+                            <select class="form-select" id="gender" name="gender" required>
+                                <option value="">Select</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <!-- PHOTO UPLOAD FIELD -->
+                        <div class="col-md-6 mb-3">
+                            <label for="photo" class="form-label">Upload Photo</label>
+                            <input type="file" class="form-control" id="photo" name="photo" accept="image/*" required>
+                        </div>
+
+                        <div class="col-12 mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                        </div>
+
+                        <div class="col-12 mb-3">
+                            <label for="marks" class="form-label">Identifying Marks</label>
+                            <textarea class="form-control" id="marks" name="marks" rows="2"></textarea>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="location" class="form-label">Last Seen Location</label>
+                            <input type="text" class="form-control" id="location" name="location" required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="last_seen_date" class="form-label">Last Seen Date</label>
+                            <input type="date" class="form-control" id="last_seen_date" name="last_seen_date" required>
+                        </div>
+
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Save Case
+                    </button>
+
+                    <a href="{{ url_for('all_cases') }}" class="btn btn-secondary">
+                        Cancel
+                    </a>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- FOOTER -->
+    <footer style="background: linear-gradient(135deg,#1e3c72 0%,#2a5298 100%); color:white;" class="pt-5 pb-3 mt-5">
+
+        <div class="container">
+
+            <div class="row">
+
+                <!-- BRAND -->
+                <div class="col-md-4 mb-4">
+                    <h5 class="fw-bold">
+                        <i class="fas fa-search me-2"></i> FaceTrace
+                    </h5>
+
+                    <p>AI Powered Missing Person Detection System</p>
+
+                    <p class="small">
+                        This is a demonstration system for Final Year Project.
+                        All data is synthetic.
+                    </p>
+                </div>
+
+                <!-- QUICK LINKS -->
+                <div class="col-md-4 mb-4">
+
+                    <h6 class="fw-bold">Quick Links</h6>
+<div class="footer-links">
+                <h6>Quick Links</h6>
+                <ul>
+                    <li><a href="{{ url_for('login') }}">🔐 Login</a></li>
+                    <li><a href="{{ url_for('register') }}">📝 Register</a></li>
+                    <li><a href="/admin/home">🏠 Dashboard</a></li>
+                    <li><a href="/admin/cctv-gallery">🖼️ CCTV Gallery</a></li>
+                    <li><a href="/admin/search-person">🔎 Search Person</a></li>
+                </ul>
+            </div>
+                </div>
+
+                <!-- FEATURES -->
+                <div class="col-md-4 mb-4">
+
+                    <h6 class="fw-bold">System Features</h6>
+
+                    <ul class="list-unstyled">
+                        <li>✓ Face Detection & Recognition</li>
+                        <li>✓ Fuzzy Text Matching</li>
+                        <li>✓ CCTV Integration</li>
+                        <li>✓ Real-time Search</li>
+                    </ul>
+
+                </div>
+
+            </div>
+
+            <hr style="border-color:rgba(255,255,255,0.3);">
+
+            <div class="text-center">
+
+                <p class="mb-1 small">
+                    © 2026 FaceTrace – AI Powered Missing Person Detection System
+                </p>
+
+                <p class="small">
+                    Final Year Project | For Demonstration Purposes
+                </p>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+</div>
+
+{% endblock %}
